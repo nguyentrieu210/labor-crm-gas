@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%}
+  body{background:#f6f8fb}
+  :root{--ac:#2563eb}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:8px;border:2px solid transparent;background-clip:content-box}
+  ::-webkit-scrollbar-thumb:hover{background:#94a3b8;background-clip:content-box}
+  @keyframes lcfade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @keyframes lctoast{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @keyframes lcspin{to{transform:rotate(360deg)}}
+  .lc-mobile,.lc-mtop,.lc-bottomnav{display:none}
+  input,select,textarea,button{font-family:inherit}
+  input:focus,select:focus,textarea:focus{outline:none}
+  @media(max-width:860px){
+    .lc-sidebar{display:none!important}
+    .lc-desktoponly{display:none!important}
+    .lc-topbar{display:none!important}
+    .lc-mtop{display:flex!important}
+    .lc-bottomnav{display:flex!important}
+    .lc-main{padding:14px 14px 86px!important}
+    .lc-dash2{grid-template-columns:1fr!important}
+    .lc-statgrid{grid-template-columns:repeat(2,1fr)!important}
+    .lc-modal{align-items:flex-end!important;padding:0!important}
+    .lc-modalcard{max-width:100%!important;width:100%!important;border-radius:18px 18px 0 0!important;max-height:92vh!important}
+    .lc-hidesm{display:none!important}
+  }
+  .lc-m .lc-sidebar{display:none!important}
+  .lc-m .lc-desktoponly{display:none!important}
+  .lc-m .lc-topbar{display:none!important}
+  .lc-m .lc-mtop{display:flex!important}
+  .lc-m .lc-bottomnav{display:flex!important}
+  .lc-m .lc-main{padding:14px 14px 20px!important;flex:1 1 auto!important;min-height:0!important;overflow:auto!important}
+  .lc-m .lc-dash2{grid-template-columns:1fr!important}
+  .lc-m .lc-statgrid{grid-template-columns:repeat(2,1fr)!important}
+  .lc-m .lc-modal{align-items:flex-end!important;padding:0!important}
+  .lc-m .lc-modalcard{max-width:100%!important;width:100%!important;border-radius:18px 18px 0 0!important;max-height:92vh!important}
+  .lc-m .lc-hidesm{display:none!important}
+  .lc-m{height:100%!important;min-height:0!important;position:relative;overflow:hidden}
+  .lc-m .lc-bottomnav{position:static!important}
+  .lc-m .lc-modal{position:absolute!important}
+  .lc-m .lc-toast{position:absolute!important}
+</style>
+</helmet>
+<div ref="{{ setRoot }}" style="display:flex;min-height:100vh;font-family:'Be Vietnam Pro',system-ui,-apple-system,sans-serif;color:#0f172a;font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased">
+
+  <aside class="lc-sidebar" style="width:248px;flex:0 0 248px;background:#0e1726;color:#cbd5e1;display:flex;flex-direction:column;position:sticky;top:0;height:100vh">
+    <div style="display:flex;align-items:center;gap:10px;padding:18px 18px 14px">
+      <div style="width:34px;height:34px;border-radius:9px;background:var(--ac);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;box-shadow:0 6px 16px color-mix(in srgb,var(--ac) 45%,transparent)">L</div>
+      <div style="line-height:1.15">
+        <div style="color:#fff;font-weight:700;font-size:15px;letter-spacing:.2px">Labor CRM</div>
+        <div style="color:#64748b;font-size:10.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.3px">FDI · RECRUITMENT</div>
+      </div>
+    </div>
+    <nav style="flex:1;overflow-y:auto;padding:4px 12px 12px;display:flex;flex-direction:column;gap:2px">
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="9">
+        <sc-if value="{{ item.groupLabel }}" hint-placeholder-val="">
+          <div style="padding:14px 10px 5px;color:#475569;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase">{{ item.groupLabel }}</div>
+        </sc-if>
+        <button onClick="{{ item.onSelect }}" style="position:relative;display:flex;align-items:center;gap:11px;width:100%;border:0;cursor:pointer;padding:9px 11px;border-radius:8px;text-align:left;font-size:13.5px;font-weight:500;background:{{ item.bg }};color:{{ item.fg }};transition:background .12s,color .12s" style-hover="background:rgba(148,163,184,.13)">
+          <sc-if value="{{ item.active }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--ac)"></span></sc-if>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto"><path d="{{ item.icon }}"></path></svg>
+          <span style="flex:1">{{ item.label }}</span>
+          <sc-if value="{{ item.badge }}" hint-placeholder-val=""><span style="background:color-mix(in srgb,var(--ac) 90%,#000);color:#fff;font-size:10.5px;font-weight:600;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 5px;font-variant-numeric:tabular-nums">{{ item.badge }}</span></sc-if>
+        </button>
+      </sc-for>
+    </nav>
+    <div style="padding:12px;border-top:1px solid rgba(148,163,184,.14);display:flex;align-items:center;gap:10px">
+      <div style="width:32px;height:32px;border-radius:8px;background:color-mix(in srgb,var(--ac) 22%,#1e293b);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12.5px;flex:0 0 auto">{{ user.initials }}</div>
+      <div style="flex:1;min-width:0">
+        <div style="color:#fff;font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ user.name }}</div>
+        <div style="color:#64748b;font-size:10.5px;font-family:'IBM Plex Mono',monospace">{{ user.email }}</div>
+      </div>
+    </div>
+  </aside>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+
+    <header class="lc-topbar" style="display:flex;align-items:center;gap:14px;padding:0 22px;height:62px;background:#fff;border-bottom:1px solid #e8edf3;position:sticky;top:0;z-index:30">
+      <div style="min-width:0">
+        <div style="font-size:16.5px;font-weight:700;letter-spacing:-.2px">{{ pageTitle }}</div>
+        <div style="font-size:12px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ pageSub }}</div>
+      </div>
+      <div style="flex:1"></div>
+
+      <div style="position:relative">
+        <button onClick="{{ toggleWeekMenu }}" style="display:flex;align-items:center;gap:8px;padding:7px 11px;border:1px solid #e2e8f0;border-radius:9px;background:#fff;font-size:13px;font-weight:500;cursor:pointer;color:#334155" style-hover="background:#f8fafc">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#64748b" stroke-width="1.9" stroke-linecap="round"><rect x="3.5" y="4.5" width="17" height="16" rx="2"></rect><path d="M3.5 9h17M8 3v3M16 3v3"></path></svg>
+          <span style="font-variant-numeric:tabular-nums">{{ weekLabel }}</span>
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M6 9l6 6 6-6"></path></svg>
+        </button>
+        <sc-if value="{{ weekMenuOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;right:0;top:46px;background:#fff;border:1px solid #e2e8f0;border-radius:11px;box-shadow:0 16px 40px rgba(15,23,42,.16);padding:6px;min-width:200px;z-index:50;animation:lcfade .14s ease">
+            <sc-for list="{{ weekList }}" as="w" hint-placeholder-count="4">
+              <button onClick="{{ w.onSelect }}" style="display:flex;align-items:center;justify-content:space-between;width:100%;border:0;background:{{ w.bg }};cursor:pointer;padding:8px 10px;border-radius:7px;text-align:left;font-size:13px;color:#334155" style-hover="background:#f1f5f9">
+                <span style="font-weight:{{ w.weight }}">{{ w.label }}</span>
+                <span style="font-size:11px;color:#94a3b8;font-family:'IBM Plex Mono',monospace">{{ w.sub }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ branchSelectable }}" hint-placeholder-val="{{ false }}">
+        <div style="position:relative">
+          <button onClick="{{ toggleBranchMenu }}" style="display:flex;align-items:center;gap:8px;padding:7px 11px;border:1px solid #e2e8f0;border-radius:9px;background:#fff;font-size:13px;font-weight:500;cursor:pointer;color:#334155" style-hover="background:#f8fafc">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#64748b" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-5h6v5"></path></svg>
+            <span>{{ branchLabel }}</span>
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M6 9l6 6 6-6"></path></svg>
+          </button>
+          <sc-if value="{{ branchMenuOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;right:0;top:46px;background:#fff;border:1px solid #e2e8f0;border-radius:11px;box-shadow:0 16px 40px rgba(15,23,42,.16);padding:6px;min-width:190px;z-index:50;animation:lcfade .14s ease">
+              <sc-for list="{{ branchList }}" as="b" hint-placeholder-count="4">
+                <button onClick="{{ b.onSelect }}" style="display:block;width:100%;border:0;background:{{ b.bg }};cursor:pointer;padding:8px 10px;border-radius:7px;text-align:left;font-size:13px;font-weight:{{ b.weight }};color:#334155" style-hover="background:#f1f5f9">{{ b.label }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+      <sc-if value="{{ branchFixed }}" hint-placeholder-val="">
+        <div style="display:flex;align-items:center;gap:8px;padding:7px 11px;border:1px dashed #d8dee8;border-radius:9px;font-size:13px;font-weight:500;color:#64748b">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#94a3b8" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14"></path></svg>{{ branchLabel }}
+        </div>
+      </sc-if>
+
+      <div style="width:1px;height:28px;background:#e8edf3"></div>
+
+      <div style="position:relative">
+        <button onClick="{{ toggleRoleMenu }}" style="display:flex;align-items:center;gap:9px;padding:5px 11px 5px 6px;border:1px solid color-mix(in srgb,var(--ac) 35%,#e2e8f0);border-radius:10px;background:color-mix(in srgb,var(--ac) 6%,#fff);cursor:pointer" style-hover="background:color-mix(in srgb,var(--ac) 11%,#fff)">
+          <div style="width:30px;height:30px;border-radius:7px;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px">{{ user.initials }}</div>
+          <div style="text-align:left;line-height:1.15">
+            <div style="font-size:12.5px;font-weight:600;color:#0f172a">{{ roleLabel }}</div>
+            <div style="font-size:10.5px;color:#64748b;font-family:'IBM Plex Mono',monospace">{{ roleCode }}</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M6 9l6 6 6-6"></path></svg>
+        </button>
+        <sc-if value="{{ roleMenuOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;right:0;top:50px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;box-shadow:0 18px 46px rgba(15,23,42,.18);padding:7px;min-width:268px;z-index:50;animation:lcfade .14s ease">
+            <div style="padding:6px 10px 8px;font-size:11px;color:#94a3b8;font-weight:600;letter-spacing:.4px;text-transform:uppercase">Xem với vai trò</div>
+            <sc-for list="{{ roleList }}" as="r" hint-placeholder-count="5">
+              <button onClick="{{ r.onSelect }}" style="display:flex;align-items:center;gap:10px;width:100%;border:0;background:{{ r.bg }};cursor:pointer;padding:9px 10px;border-radius:8px;text-align:left" style-hover="background:#f1f5f9">
+                <span style="width:26px;height:26px;border-radius:7px;background:{{ r.dotBg }};color:{{ r.dotFg }};display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;font-family:'IBM Plex Mono',monospace;flex:0 0 auto">{{ r.code }}</span>
+                <span style="flex:1;min-width:0"><span style="display:block;font-size:13px;font-weight:600;color:#0f172a">{{ r.label }}</span><span style="display:block;font-size:11.5px;color:#64748b">{{ r.desc }}</span></span>
+                <sc-if value="{{ r.active }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--ac)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></sc-if>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </header>
+
+    <header class="lc-mtop" style="align-items:center;gap:11px;padding:0 14px;height:54px;background:#0e1726;color:#fff;position:sticky;top:0;z-index:30">
+      <div style="width:30px;height:30px;border-radius:8px;background:var(--ac);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px">L</div>
+      <div style="flex:1;min-width:0;line-height:1.15">
+        <div style="font-weight:700;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ pageTitle }}</div>
+        <div style="font-size:11px;color:#94a3b8;font-variant-numeric:tabular-nums">{{ weekLabel }}</div>
+      </div>
+      <button onClick="{{ toggleRoleMenu }}" style="display:flex;align-items:center;gap:7px;padding:5px 9px;border:1px solid rgba(148,163,184,.3);border-radius:9px;background:rgba(148,163,184,.12);cursor:pointer;color:#fff">
+        <span style="font-size:12px;font-weight:600">{{ roleCode }}</span>
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#cbd5e1" stroke-width="2"><path d="M6 9l6 6 6-6"></path></svg>
+      </button>
+      <sc-if value="{{ roleMenuOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;right:12px;top:52px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;box-shadow:0 18px 46px rgba(15,23,42,.22);padding:7px;min-width:248px;z-index:55;animation:lcfade .14s ease">
+          <sc-for list="{{ roleList }}" as="r" hint-placeholder-count="5">
+            <button onClick="{{ r.onSelect }}" style="display:flex;align-items:center;gap:10px;width:100%;border:0;background:{{ r.bg }};cursor:pointer;padding:9px 10px;border-radius:8px;text-align:left">
+              <span style="width:26px;height:26px;border-radius:7px;background:{{ r.dotBg }};color:{{ r.dotFg }};display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;font-family:'IBM Plex Mono',monospace">{{ r.code }}</span>
+              <span style="flex:1;min-width:0"><span style="display:block;font-size:13px;font-weight:600;color:#0f172a">{{ r.label }}</span><span style="display:block;font-size:11.5px;color:#64748b">{{ r.desc }}</span></span>
+              <sc-if value="{{ r.active }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--ac)" stroke-width="2.4"><path d="M20 6L9 17l-5-5"></path></svg></sc-if>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+    </header>
+
+    <main class="lc-main" style="flex:1;min-width:0;padding:22px 26px;background:#f6f8fb">
+      <div style="max-width:1480px;margin:0 auto">
+
+        <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+          <sc-if value="{{ dashEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#fff;border:1px solid #e8edf3;border-radius:14px;padding:60px 24px;text-align:center">
+              <div style="width:54px;height:54px;border-radius:14px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;margin:0 auto 14px"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#94a3b8" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"></path></svg></div>
+              <div style="font-size:16px;font-weight:600">Chưa có dữ liệu cho {{ weekLabel }}</div>
+              <div style="font-size:13px;color:#64748b;margin-top:5px">Chọn một tuần khác hoặc bắt đầu nhập báo cáo ngày.</div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ dashHasData }}" hint-placeholder-val="{{ true }}">
+            <div class="lc-statgrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(186px,1fr));gap:13px;margin-bottom:15px">
+              <sc-for list="{{ dashStats }}" as="s" hint-placeholder-count="6">
+                <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:15px 16px 14px">
+                  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+                    <span style="color:#64748b;font-size:12.5px;font-weight:500;padding-top:3px">{{ s.label }}</span>
+                    <span style="width:31px;height:31px;border-radius:9px;background:{{ s.iconBg }};color:{{ s.iconFg }};display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="{{ s.icon }}"></path></svg></span>
+                  </div>
+                  <div style="font-size:26px;font-weight:700;letter-spacing:-.6px;margin-top:9px;font-variant-numeric:tabular-nums">{{ s.value }}</div>
+                  <div style="font-size:12px;font-weight:600;color:{{ s.subColor }};margin-top:3px">{{ s.sub }}</div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div class="lc-dash2" style="display:grid;grid-template-columns:1.5fr 1fr;gap:15px;align-items:start">
+              <div style="display:flex;flex-direction:column;gap:15px">
+
+                <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:17px 18px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+                    <div style="font-size:14.5px;font-weight:700">Phễu tuyển dụng tuần</div>
+                    <div style="font-size:11.5px;color:#94a3b8;font-family:'IBM Plex Mono',monospace">{{ weekShort }}</div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:9px">
+                    <sc-for list="{{ dashFunnel.bars }}" as="b" hint-placeholder-count="4">
+                      <div style="display:flex;align-items:center;gap:12px">
+                        <span style="width:74px;font-size:12.5px;color:#475569;flex:0 0 auto">{{ b.label }}</span>
+                        <div style="flex:1;height:28px;background:#f1f5f9;border-radius:7px;overflow:hidden;position:relative">
+                          <div style="height:100%;width:{{ b.pct }};background:{{ b.color }};border-radius:7px;transition:width .5s cubic-bezier(.4,0,.2,1)"></div>
+                        </div>
+                        <span style="width:54px;text-align:right;font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums;flex:0 0 auto">{{ b.val }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px;padding-top:14px;border-top:1px solid #eef2f7">
+                    <div><div style="font-size:11px;color:#94a3b8;font-weight:500">Fill rate</div><div style="font-size:18px;font-weight:700;color:var(--ac);font-variant-numeric:tabular-nums">{{ dashFunnel.fillText }}</div></div>
+                    <div><div style="font-size:11px;color:#94a3b8;font-weight:500">Chuyển đổi</div><div style="font-size:18px;font-weight:700;font-variant-numeric:tabular-nums">{{ dashFunnel.convText }}</div></div>
+                    <div><div style="font-size:11px;color:#94a3b8;font-weight:500">Đậu PV</div><div style="font-size:18px;font-weight:700;font-variant-numeric:tabular-nums">{{ dashFunnel.passText }}</div></div>
+                  </div>
+                </div>
+
+                <sc-if value="{{ showBranchPanel }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:17px 18px">
+                    <div style="font-size:14.5px;font-weight:700;margin-bottom:14px">Fill rate theo chi nhánh</div>
+                    <div style="display:flex;flex-direction:column;gap:11px">
+                      <sc-for list="{{ dashBranchFill }}" as="b" hint-placeholder-count="3">
+                        <div style="display:flex;align-items:center;gap:12px">
+                          <span style="width:96px;font-size:13px;font-weight:500;flex:0 0 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ b.name }}</span>
+                          <div style="flex:1;height:10px;background:#f1f5f9;border-radius:6px;overflow:hidden"><div style="height:100%;width:{{ b.barPct }};background:{{ b.color }};border-radius:6px"></div></div>
+                          <span style="width:48px;text-align:right;font-size:13px;font-weight:700;color:{{ b.color }};font-variant-numeric:tabular-nums;flex:0 0 auto">{{ b.pctText }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:17px 18px 8px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                    <div style="font-size:14.5px;font-weight:700">KPI cần chú ý</div>
+                    <button onClick="{{ goKpi }}" style="border:0;background:none;color:var(--ac);font-size:12.5px;font-weight:600;cursor:pointer;padding:4px">Xem tất cả →</button>
+                  </div>
+                  <sc-for list="{{ dashKpiLow }}" as="k" hint-placeholder-count="5">
+                    <div onClick="{{ k.onClick }}" style="display:flex;align-items:center;gap:12px;padding:9px 4px;border-top:1px solid #f1f5f9;cursor:pointer" style-hover="background:#f8fafc">
+                      <span style="flex:1;min-width:0"><span style="display:block;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ k.project }}</span><span style="display:block;font-size:11.5px;color:#94a3b8">{{ k.specialist }}</span></span>
+                      <div style="width:90px;height:7px;background:#f1f5f9;border-radius:5px;overflow:hidden;flex:0 0 auto"><div style="height:100%;width:{{ k.barPct }};background:{{ k.color }};border-radius:5px"></div></div>
+                      <span style="width:46px;text-align:right;font-size:13px;font-weight:700;color:{{ k.color }};font-variant-numeric:tabular-nums;flex:0 0 auto">{{ k.fillText }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:15px">
+
+                <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:17px 18px">
+                  <div style="font-size:14.5px;font-weight:700;margin-bottom:13px">Cần xử lý</div>
+                  <sc-if value="{{ dashActionEmpty }}" hint-placeholder-val="{{ false }}">
+                    <div style="text-align:center;padding:18px 8px"><div style="width:40px;height:40px;border-radius:11px;background:#dcfce7;color:#16a34a;display:flex;align-items:center;justify-content:center;margin:0 auto 9px"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></div><div style="font-size:13px;color:#64748b">Không có việc tồn đọng</div></div>
+                  </sc-if>
+                  <div style="display:flex;flex-direction:column;gap:2px">
+                    <sc-for list="{{ dashAction }}" as="a" hint-placeholder-count="3">
+                      <button onClick="{{ a.onClick }}" style="display:flex;align-items:center;gap:11px;width:100%;border:0;background:none;cursor:pointer;padding:10px 8px;border-radius:9px;text-align:left" style-hover="background:#f8fafc">
+                        <span style="width:9px;height:9px;border-radius:50%;background:{{ a.dot }};flex:0 0 auto;margin-top:1px"></span>
+                        <span style="flex:1;min-width:0"><span style="display:block;font-size:13px;font-weight:600;color:#0f172a">{{ a.title }}</span><span style="display:block;font-size:11.5px;color:#94a3b8">{{ a.sub }}</span></span>
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#cbd5e1" stroke-width="2" style="flex:0 0 auto"><path d="M9 6l6 6-6 6"></path></svg>
+                      </button>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <sc-if value="{{ showFinance }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:17px 18px">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+                      <div style="font-size:14.5px;font-weight:700">Tuổi nợ</div>
+                      <button onClick="{{ goReceivables }}" style="border:0;background:none;color:var(--ac);font-size:12.5px;font-weight:600;cursor:pointer;padding:4px">Chi tiết →</button>
+                    </div>
+                    <div style="font-size:24px;font-weight:700;letter-spacing:-.5px;font-variant-numeric:tabular-nums">{{ dashAging.total }}</div>
+                    <div style="font-size:11.5px;color:#94a3b8;margin-bottom:13px">Tổng còn phải thu</div>
+                    <div style="display:flex;height:11px;border-radius:6px;overflow:hidden;background:#f1f5f9;margin-bottom:13px">
+                      <sc-for list="{{ dashAging.buckets }}" as="bk" hint-placeholder-count="4"><div style="height:100%;width:{{ bk.width }};background:{{ bk.color }}"></div></sc-for>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:8px">
+                      <sc-for list="{{ dashAging.buckets }}" as="bk" hint-placeholder-count="4">
+                        <div style="display:flex;align-items:center;gap:9px">
+                          <span style="width:9px;height:9px;border-radius:3px;background:{{ bk.color }};flex:0 0 auto"></span>
+                          <span style="flex:1;font-size:12.5px;color:#475569">{{ bk.label }}</span>
+                          <span style="font-size:11px;color:#94a3b8">{{ bk.count }} HS</span>
+                          <span style="font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;width:64px;text-align:right">{{ bk.amount }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-if>
+
+              </div>
+            </div>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{ isDaily }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:14px">
+            <div style="position:relative;flex:1;min-width:180px;max-width:280px">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#94a3b8" stroke-width="1.9" stroke-linecap="round" style="position:absolute;left:11px;top:50%;transform:translateY(-50%)"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+              <input value="{{ dailyQ }}" onInput="{{ onDailyQ }}" placeholder="Tìm dự án, xưởng, CV…" style="width:100%;padding:9px 11px 9px 34px;border:1px solid #e2e8f0;border-radius:9px;font-size:13px;background:#fff;color:#334155"/>
+            </div>
+            <select value="{{ dailyProject }}" onChange="{{ onDailyProject }}" style="padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13px;background:#fff;color:#334155;cursor:pointer;max-width:200px">
+              <sc-for list="{{ dailyProjectOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+            </select>
+            <select value="{{ dailyMethod }}" onChange="{{ onDailyMethod }}" class="lc-hidesm" style="padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13px;background:#fff;color:#334155;cursor:pointer">
+              <sc-for list="{{ dailyMethodOpts }}" as="o" hint-placeholder-count="4"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+            </select>
+            <div style="flex:1"></div>
+            <sc-if value="{{ dailyCanEdit }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ onNewReport }}" style="display:flex;align-items:center;gap:7px;padding:9px 15px;border:0;border-radius:9px;background:var(--ac);color:#fff;font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap;box-shadow:0 2px 8px color-mix(in srgb,var(--ac) 35%,transparent)" style-hover="background:color-mix(in srgb,var(--ac),#000 8%)">
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="flex:0 0 auto"><path d="M12 5v14M5 12h14"></path></svg>Nhập báo cáo
+              </button>
+            </sc-if>
+          </div>
+
+          <sc-if value="{{ dailyHasPending }}" hint-placeholder-val="{{ false }}">
+            <div style="background:color-mix(in srgb,#d97706 8%,#fff);border:1px solid #fde68a;border-radius:12px;padding:13px 15px;margin-bottom:14px">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+                <span style="font-size:13px;font-weight:600;color:#92400e">{{ dailyPendingCount }} chuyên viên chưa nhập báo cáo hôm nay</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ dailyPending }}" as="p" hint-placeholder-count="3">
+                  <button onClick="{{ p.onFill }}" style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #fcd9a0;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:12.5px;white-space:nowrap" style-hover="border-color:#d97706">
+                    <span style="font-weight:600;color:#334155">{{ p.project }}</span><span style="color:#94a3b8">·</span><span style="color:#64748b">{{ p.specialist }}</span>
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px" class="lc-statgrid">
+            <sc-for list="{{ dailySummary }}" as="s" hint-placeholder-count="5">
+              <div style="background:#fff;border:1px solid #e8edf3;border-radius:11px;padding:12px 14px">
+                <div style="font-size:11.5px;color:#94a3b8;font-weight:500">{{ s.label }}</div>
+                <div style="font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px;color:{{ s.accent }}">{{ s.value }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ dailyEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:52px 24px;text-align:center">
+              <div style="width:50px;height:50px;border-radius:13px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;margin:0 auto 13px"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#94a3b8" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v13a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1zM14 3v4h4M9 13h6M9 17h4"></path></svg></div>
+              <div style="font-size:15.5px;font-weight:600">Chưa có báo cáo ngày cho {{ weekLabel }}</div>
+              <div style="font-size:13px;color:#64748b;margin:5px 0 16px">Bắt đầu nhập phễu tuyển dụng cho tuần này.</div>
+              <sc-if value="{{ dailyCanEdit }}" hint-placeholder-val="{{ true }}"><button onClick="{{ onNewReport }}" style="display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border:0;border-radius:9px;background:var(--ac);color:#fff;font-size:13.5px;font-weight:600;cursor:pointer"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Nhập báo cáo</button></sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ dailyHasRows }}" hint-placeholder-val="{{ true }}">
+            <div class="lc-desktoponly" style="background:#fff;border:1px solid #e8edf3;border-radius:13px;overflow:hidden">
+              <div style="overflow-x:auto">
+                <table style="width:100%;border-collapse:collapse;min-width:840px">
+                  <thead><tr style="background:#fbfcfe">
+                    <th style="text-align:left;padding:11px 14px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Ngày</th>
+                    <th style="text-align:left;padding:11px 14px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Dự án</th>
+                    <th style="text-align:left;padding:11px 14px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Xưởng</th>
+                    <th style="text-align:left;padding:11px 14px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Chuyên viên</th>
+                    <th style="text-align:left;padding:11px 14px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">PT</th>
+                    <th style="text-align:right;padding:11px 14px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">ĐK</th>
+                    <th style="text-align:right;padding:11px 14px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">PV</th>
+                    <th style="text-align:right;padding:11px 14px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Đỗ</th>
+                    <th style="text-align:right;padding:11px 14px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Đi làm</th>
+                    <th style="width:36px;border-bottom:1px solid #e8edf3"></th>
+                  </tr></thead>
+                  <tbody>
+                    <sc-for list="{{ dailyRows }}" as="r" hint-placeholder-count="8">
+                      <tr onClick="{{ r.onEdit }}" style="cursor:pointer" style-hover="background:#f8fafc">
+                        <td style="padding:{{ r.py }} 14px;border-bottom:1px solid #f1f5f9;font-size:13px;font-variant-numeric:tabular-nums;color:#475569;white-space:nowrap">{{ r.date }}</td>
+                        <td style="padding:{{ r.py }} 14px;border-bottom:1px solid #f1f5f9;font-size:13px;font-weight:600;white-space:nowrap">{{ r.project }}</td>
+                        <td style="padding:{{ r.py }} 14px;border-bottom:1px solid #f1f5f9;font-size:13px;color:#475569;white-space:nowrap">{{ r.workshop }}</td>
+                        <td style="padding:{{ r.py }} 14px;border-bottom:1px solid #f1f5f9;font-size:13px;color:#475569;white-space:nowrap">{{ r.specialist }}</td>
+                        <td style="padding:{{ r.py }} 14px;border-bottom:1px solid #f1f5f9"><span style="font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:6px;background:{{ r.mBg }};color:{{ r.mFg }};white-space:nowrap">{{ r.method }}</span></td>
+                        <td style="padding:{{ r.py }} 14px;border-bottom:1px solid #f1f5f9;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;color:#475569">{{ r.reg }}</td>
+                        <td style="padding:{{ r.py }} 14px;border-bottom:1px solid #f1f5f9;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;color:#475569">{{ r.intv }}</td>
+                        <td style="padding:{{ r.py }} 14px;border-bottom:1px solid #f1f5f9;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;color:#475569">{{ r.pass }}</td>
+                        <td style="padding:{{ r.py }} 14px;border-bottom:1px solid #f1f5f9;font-size:13.5px;text-align:right;font-variant-numeric:tabular-nums;font-weight:700">{{ r.start }}</td>
+                        <td style="padding:{{ r.py }} 8px;border-bottom:1px solid #f1f5f9;text-align:center">
+                          <sc-if value="{{ r.warn }}" hint-placeholder-val="{{ false }}"><span title="Đi làm nhiều hơn Đỗ PV" style="display:inline-flex"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0zM12 9v4M12 17h.01"></path></svg></span></sc-if>
+                        </td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="lc-mobile" style="flex-direction:column;gap:10px">
+              <sc-for list="{{ dailyRows }}" as="r" hint-placeholder-count="4">
+                <div onClick="{{ r.onEdit }}" style="background:#fff;border:1px solid #e8edf3;border-radius:12px;padding:13px 14px;cursor:pointer">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px">
+                    <span style="font-size:14px;font-weight:700">{{ r.project }}</span>
+                    <span style="font-size:12px;color:#94a3b8;font-variant-numeric:tabular-nums">{{ r.date }}</span>
+                  </div>
+                  <div style="font-size:12.5px;color:#64748b;margin-bottom:10px">{{ r.workshop }} · {{ r.specialist }} · <span style="color:{{ r.mFg }}">{{ r.method }}</span></div>
+                  <div style="display:flex;gap:14px">
+                    <span style="font-size:12.5px;color:#64748b">ĐK <b style="color:#0f172a;font-variant-numeric:tabular-nums">{{ r.reg }}</b></span>
+                    <span style="font-size:12.5px;color:#64748b">PV <b style="color:#0f172a;font-variant-numeric:tabular-nums">{{ r.intv }}</b></span>
+                    <span style="font-size:12.5px;color:#64748b">Đỗ <b style="color:#0f172a;font-variant-numeric:tabular-nums">{{ r.pass }}</b></span>
+                    <span style="font-size:12.5px;color:#64748b">Đi làm <b style="color:var(--ac);font-variant-numeric:tabular-nums">{{ r.start }}</b></span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{ isKpi }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:14px">
+            <select value="{{ kpiProject }}" onChange="{{ onKpiProject }}" style="padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13px;background:#fff;color:#334155;cursor:pointer;max-width:200px"><sc-for list="{{ kpiProjectOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select>
+            <select value="{{ kpiSpecialist }}" onChange="{{ onKpiSpecialist }}" class="lc-hidesm" style="padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13px;background:#fff;color:#334155;cursor:pointer;max-width:180px"><sc-for list="{{ kpiSpecialistOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select>
+            <select value="{{ kpiSort }}" onChange="{{ onKpiSort }}" style="padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13px;background:#fff;color:#334155;cursor:pointer"><option value="fill">Sắp theo Fill rate</option><option value="conversion">Sắp theo Chuyển đổi</option><option value="started">Sắp theo Đi làm</option></select>
+            <button onClick="{{ toggleKpiMismatch }}" style="display:flex;align-items:center;gap:9px;padding:7px 12px 7px 11px;border:1px solid #e2e8f0;border-radius:9px;background:#fff;font-size:13px;color:#334155;cursor:pointer">
+              <span style="position:relative;width:34px;height:18px;border-radius:10px;background:{{ kpiSwitchBg }};transition:background .15s;flex:0 0 auto"><span style="position:absolute;top:2px;left:{{ kpiKnobX }};width:14px;height:14px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.2)"></span></span>Chỉ dòng lệch
+            </button>
+            <div style="flex:1"></div>
+            <div style="display:flex;align-items:center;gap:6px;padding:6px 11px;border-radius:8px;background:#f1f5f9;font-size:12px;color:#64748b;font-weight:500"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"><rect x="4" y="11" width="16" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 018 0v3"></path></svg>Chỉ đọc</div>
+            <sc-if value="{{ kpiCanRecompute }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ onRecompute }}" style="display:flex;align-items:center;gap:7px;padding:9px 14px;border:1px solid color-mix(in srgb,var(--ac) 30%,#e2e8f0);border-radius:9px;background:color-mix(in srgb,var(--ac) 7%,#fff);color:var(--ac);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:color-mix(in srgb,var(--ac) 13%,#fff)"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3-6.7L21 8M21 3v5h-5"></path></svg>Tính lại tuần</button>
+            </sc-if>
+          </div>
+
+          <div class="lc-statgrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:15px">
+            <sc-for list="{{ kpiCards }}" as="c" hint-placeholder-count="4">
+              <div style="background:#fff;border:1px solid #e8edf3;border-radius:12px;padding:15px 16px">
+                <div style="font-size:12.5px;color:#64748b;font-weight:500">{{ c.label }}</div>
+                <div style="font-size:27px;font-weight:700;letter-spacing:-.6px;margin-top:6px;font-variant-numeric:tabular-nums;color:{{ c.valColor }}">{{ c.value }}</div>
+                <div style="font-size:11.5px;color:#94a3b8;margin-top:2px">{{ c.sub }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ kpiEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:52px 24px;text-align:center">
+              <div style="width:50px;height:50px;border-radius:13px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;margin:0 auto 13px"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#94a3b8" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M7 21V9M12 21V4M17 21v-7"></path></svg></div>
+              <div style="font-size:15.5px;font-weight:600">Chưa có KPI cho {{ weekLabel }}</div>
+              <div style="font-size:13px;color:#64748b;margin-top:5px">KPI tuần được tính tự động từ Nhu cầu tuần và Báo cáo ngày.</div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ kpiHasRows }}" hint-placeholder-val="{{ true }}">
+            <div class="lc-desktoponly" style="background:#fff;border:1px solid #e8edf3;border-radius:13px;overflow:hidden">
+              <div style="overflow-x:auto">
+                <table style="width:100%;border-collapse:collapse;min-width:940px">
+                  <thead><tr style="background:#fbfcfe">
+                    <th style="text-align:left;padding:11px 14px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Dự án</th>
+                    <th style="text-align:left;padding:11px 14px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Chuyên viên</th>
+                    <th style="text-align:right;padding:11px 10px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">KPI</th>
+                    <th style="text-align:right;padding:11px 10px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">ĐK</th>
+                    <th style="text-align:right;padding:11px 10px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">PV</th>
+                    <th style="text-align:right;padding:11px 10px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Đỗ</th>
+                    <th style="text-align:right;padding:11px 10px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Đi làm</th>
+                    <th style="text-align:center;padding:11px 12px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Fill</th>
+                    <th style="text-align:right;padding:11px 10px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Ch.đổi</th>
+                    <th style="text-align:right;padding:11px 10px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Đậu PV</th>
+                    <th style="text-align:center;padding:11px 12px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Lệch</th>
+                  </tr></thead>
+                  <tbody>
+                    <sc-for list="{{ kpiRows }}" as="r" hint-placeholder-count="8">
+                      <tr onClick="{{ r.onDrill }}" style="cursor:pointer" style-hover="background:#f8fafc">
+                        <td style="padding:{{ r.py }} 14px;border-bottom:1px solid #f1f5f9;font-size:13px;font-weight:600;white-space:nowrap">{{ r.project }}</td>
+                        <td style="padding:{{ r.py }} 14px;border-bottom:1px solid #f1f5f9;font-size:13px;color:#475569;white-space:nowrap">{{ r.specialist }}</td>
+                        <td style="padding:{{ r.py }} 10px;border-bottom:1px solid #f1f5f9;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600">{{ r.kpiv }}</td>
+                        <td style="padding:{{ r.py }} 10px;border-bottom:1px solid #f1f5f9;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;color:#64748b">{{ r.reg }}</td>
+                        <td style="padding:{{ r.py }} 10px;border-bottom:1px solid #f1f5f9;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;color:#64748b">{{ r.intv }}</td>
+                        <td style="padding:{{ r.py }} 10px;border-bottom:1px solid #f1f5f9;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;color:#64748b">{{ r.pass }}</td>
+                        <td style="padding:{{ r.py }} 10px;border-bottom:1px solid #f1f5f9;font-size:13.5px;text-align:right;font-variant-numeric:tabular-nums;font-weight:700">{{ r.start }}</td>
+                        <td style="padding:{{ r.py }} 12px;border-bottom:1px solid #f1f5f9;text-align:center"><span style="display:inline-block;min-width:46px;padding:3px 8px;border-radius:7px;font-size:12.5px;font-weight:700;background:{{ r.fillBg }};color:{{ r.fillFg }};font-variant-numeric:tabular-nums">{{ r.fillText }}</span></td>
+                        <td style="padding:{{ r.py }} 10px;border-bottom:1px solid #f1f5f9;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;color:#64748b">{{ r.conv }}</td>
+                        <td style="padding:{{ r.py }} 10px;border-bottom:1px solid #f1f5f9;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;color:#64748b">{{ r.prate }}</td>
+                        <td style="padding:{{ r.py }} 12px;border-bottom:1px solid #f1f5f9;text-align:center">
+                          <sc-if value="{{ r.mismatch }}" hint-placeholder-val="{{ false }}"><span title="Lệch CV — thiếu nhu cầu hoặc thiếu báo cáo" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#d97706"></span></sc-if>
+                        </td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="lc-mobile" style="flex-direction:column;gap:10px">
+              <sc-for list="{{ kpiRows }}" as="r" hint-placeholder-count="4">
+                <div onClick="{{ r.onDrill }}" style="background:#fff;border:1px solid #e8edf3;border-radius:12px;padding:13px 14px;cursor:pointer">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px">
+                    <div style="min-width:0"><div style="font-size:14px;font-weight:700">{{ r.project }}</div><div style="font-size:12px;color:#94a3b8">{{ r.specialist }}</div></div>
+                    <span style="padding:4px 10px;border-radius:8px;font-size:14px;font-weight:700;background:{{ r.fillBg }};color:{{ r.fillFg }};font-variant-numeric:tabular-nums">{{ r.fillText }}</span>
+                  </div>
+                  <div style="display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:#64748b">
+                    <span>KPI <b style="color:#0f172a">{{ r.kpiv }}</b></span><span>Đi làm <b style="color:#0f172a">{{ r.start }}</b></span><span>Ch.đổi <b style="color:#0f172a">{{ r.conv }}</b></span><span>Đậu PV <b style="color:#0f172a">{{ r.prate }}</b></span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{ isDemand }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px">
+            <select value="{{ demandProject }}" onChange="{{ onDemandProject }}" style="padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13px;background:#fff;color:#334155;cursor:pointer;max-width:240px"><sc-for list="{{ demandProjectOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select>
+            <div style="flex:1"></div>
+            <sc-if value="{{ demandReadonly }}" hint-placeholder-val=""><div style="display:flex;align-items:center;gap:6px;padding:6px 11px;border-radius:8px;background:#f1f5f9;font-size:12px;color:#64748b;font-weight:500"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"><rect x="4" y="11" width="16" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 018 0v3"></path></svg>Chỉ đọc</div></sc-if>
+            <sc-if value="{{ demandDirty }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ onSaveDemand }}" style="display:flex;align-items:center;gap:7px;padding:9px 16px;border:0;border-radius:9px;background:{{ demandSaveBg }};color:#fff;font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap;box-shadow:0 2px 8px color-mix(in srgb,var(--ac) 35%,transparent)"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"></path></svg>Lưu tất cả</button>
+            </sc-if>
+          </div>
+          <div style="font-size:12.5px;color:#64748b;margin-bottom:14px">{{ demandHint }}</div>
+
+          <sc-if value="{{ demandEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:52px 24px;text-align:center">
+              <div style="width:50px;height:50px;border-radius:13px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;margin:0 auto 13px"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#94a3b8" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4"></circle></svg></div>
+              <div style="font-size:15.5px;font-weight:600">Chưa có nhu cầu cho {{ weekLabel }}</div>
+              <div style="font-size:13px;color:#64748b;margin-top:5px">Chọn một dự án để mở lưới nhập theo chuyên viên.</div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ demandHasRows }}" hint-placeholder-val="{{ true }}">
+            <div class="lc-desktoponly" style="background:#fff;border:1px solid #e8edf3;border-radius:13px;overflow:hidden">
+              <table style="width:100%;border-collapse:collapse">
+                <thead><tr style="background:#fbfcfe">
+                  <th style="text-align:left;padding:11px 16px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Dự án</th>
+                  <th style="text-align:left;padding:11px 16px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Chuyên viên</th>
+                  <th style="text-align:right;padding:11px 16px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3;width:160px">Nhu cầu KH</th>
+                  <th style="text-align:right;padding:11px 16px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3;width:160px">KPI giao</th>
+                </tr></thead>
+                <tbody>
+                  <sc-for list="{{ demandRows }}" as="r" hint-placeholder-count="5">
+                    <tr style-hover="background:#fbfcfe">
+                      <td style="padding:9px 16px;border-bottom:1px solid #f1f5f9;font-size:13px;font-weight:600;white-space:nowrap">{{ r.project }}</td>
+                      <td style="padding:9px 16px;border-bottom:1px solid #f1f5f9;font-size:13px;color:#475569;white-space:nowrap">{{ r.specialist }}</td>
+                      <td style="padding:7px 16px;border-bottom:1px solid #f1f5f9;text-align:right"><input type="number" min="0" value="{{ r.customer_demand }}" onInput="{{ r.onCd }}" disabled="{{ r.ro }}" style="width:100px;padding:7px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13.5px;text-align:right;font-variant-numeric:tabular-nums;background:#fff;color:#0f172a"/></td>
+                      <td style="padding:7px 16px;border-bottom:1px solid #f1f5f9;text-align:right"><input type="number" min="0" value="{{ r.assigned_kpi }}" onInput="{{ r.onAk }}" disabled="{{ r.ro }}" style="width:100px;padding:7px 10px;border:1px solid {{ r.akBorder }};border-radius:8px;font-size:13.5px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;background:#fff;color:#0f172a"/></td>
+                    </tr>
+                  </sc-for>
+                  <tr style="background:#fbfcfe">
+                    <td colspan="2" style="padding:11px 16px;font-size:12.5px;font-weight:700;color:#475569">Tổng cộng</td>
+                    <td style="padding:11px 16px;text-align:right;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums">{{ demandTotalCd }}</td>
+                    <td style="padding:11px 16px;text-align:right;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ac)">{{ demandTotalAk }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="lc-mobile" style="flex-direction:column;gap:10px">
+              <sc-for list="{{ demandRows }}" as="r" hint-placeholder-count="4">
+                <div style="background:#fff;border:1px solid #e8edf3;border-radius:12px;padding:13px 14px">
+                  <div style="font-size:13.5px;font-weight:700;margin-bottom:2px">{{ r.project }}</div>
+                  <div style="font-size:12px;color:#94a3b8;margin-bottom:11px">{{ r.specialist }}</div>
+                  <div style="display:flex;gap:12px">
+                    <div style="flex:1"><label style="display:block;font-size:11.5px;color:#64748b;margin-bottom:4px">Nhu cầu KH</label><input type="number" min="0" value="{{ r.customer_demand }}" onInput="{{ r.onCd }}" disabled="{{ r.ro }}" style="width:100%;padding:9px 11px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;text-align:right;font-variant-numeric:tabular-nums;background:#fff;color:#0f172a"/></div>
+                    <div style="flex:1"><label style="display:block;font-size:11.5px;color:#64748b;margin-bottom:4px">KPI giao</label><input type="number" min="0" value="{{ r.assigned_kpi }}" onInput="{{ r.onAk }}" disabled="{{ r.ro }}" style="width:100%;padding:9px 11px;border:1px solid {{ r.akBorder }};border-radius:8px;font-size:14px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;background:#fff;color:#0f172a"/></div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{ isCustomers }}" hint-placeholder-val="{{ false }}">
+
+          <sc-if value="{{ isCustomerList }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:14px">
+              <div style="position:relative;flex:1;min-width:200px;max-width:320px">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#94a3b8" stroke-width="1.9" stroke-linecap="round" style="position:absolute;left:11px;top:50%;transform:translateY(-50%)"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+                <input value="{{ customerQ }}" onInput="{{ onCustomerQ }}" placeholder="Tìm khách hàng…" style="width:100%;padding:9px 11px 9px 34px;border:1px solid #e2e8f0;border-radius:9px;font-size:13px;background:#fff;color:#334155"/>
+              </div>
+              <select value="{{ customerType }}" onChange="{{ onCustomerType }}" style="padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13px;background:#fff;color:#334155;cursor:pointer"><sc-for list="{{ customerTypeOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select>
+            </div>
+            <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;overflow:hidden">
+              <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;min-width:680px">
+                <thead><tr style="background:#fbfcfe">
+                  <th style="text-align:left;padding:11px 16px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Khách hàng</th>
+                  <th style="text-align:left;padding:11px 14px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Loại</th>
+                  <th style="text-align:left;padding:11px 14px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Chi nhánh</th>
+                  <th style="text-align:left;padding:11px 14px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Quản lý</th>
+                  <th style="text-align:right;padding:11px 16px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Còn nợ</th>
+                  <th style="width:34px;border-bottom:1px solid #e8edf3"></th>
+                </tr></thead>
+                <tbody>
+                  <sc-for list="{{ customerCards }}" as="c" hint-placeholder-count="6">
+                    <tr onClick="{{ c.onOpen }}" style="cursor:pointer" style-hover="background:#f8fafc">
+                      <td style="padding:11px 16px;border-bottom:1px solid #f1f5f9"><div style="font-size:13.5px;font-weight:600">{{ c.name }}</div><sc-if value="{{ c.hasZh }}" hint-placeholder-val=""><div style="font-size:11.5px;color:#94a3b8">{{ c.zh }}</div></sc-if></td>
+                      <td style="padding:11px 14px;border-bottom:1px solid #f1f5f9"><span style="font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:20px;background:{{ c.typeBg }};color:{{ c.typeFg }};white-space:nowrap">{{ c.typeLabel }}</span></td>
+                      <td style="padding:11px 14px;border-bottom:1px solid #f1f5f9;font-size:13px;color:#475569">{{ c.branch }}</td>
+                      <td style="padding:11px 14px;border-bottom:1px solid #f1f5f9;font-size:13px;color:#475569">
+                        <sc-if value="{{ c.manager }}" hint-placeholder-val="">{{ c.manager }}</sc-if>
+                        <sc-if value="{{ c.noManager }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;color:#b45309;background:#fef3c7;padding:3px 8px;border-radius:6px">Thiếu QL</span></sc-if>
+                      </td>
+                      <td style="padding:11px 16px;border-bottom:1px solid #f1f5f9;font-size:13px;text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:{{ c.remColor }}">{{ c.remaining }}</td>
+                      <td style="padding:11px 8px;border-bottom:1px solid #f1f5f9;text-align:center"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#cbd5e1" stroke-width="2"><path d="M9 6l6 6-6 6"></path></svg></td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table></div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isCustomerDetail }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ customerDetail.onBack }}" style="display:inline-flex;align-items:center;gap:6px;border:0;background:none;color:#64748b;font-size:13px;font-weight:500;cursor:pointer;padding:4px 0;margin-bottom:12px" style-hover="color:#0f172a"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>Danh sách khách hàng</button>
+            <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:18px 20px;margin-bottom:14px">
+              <div style="display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap">
+                <div style="width:48px;height:48px;border-radius:12px;background:color-mix(in srgb,var(--ac) 12%,#fff);color:var(--ac);display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-5h6v5"></path></svg></div>
+                <div style="flex:1;min-width:0">
+                  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="font-size:19px;font-weight:700;letter-spacing:-.3px">{{ customerDetail.name }}</span><span style="font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:20px;background:{{ customerDetail.typeBg }};color:{{ customerDetail.typeFg }}">{{ customerDetail.typeLabel }}</span></div>
+                  <sc-if value="{{ customerDetail.hasZh }}" hint-placeholder-val=""><div style="font-size:13px;color:#94a3b8;margin-top:1px">{{ customerDetail.zh }}</div></sc-if>
+                  <div style="font-size:13px;color:#64748b;margin-top:5px">{{ customerDetail.branch }} · QL: 
+                    <sc-if value="{{ customerDetail.manager }}" hint-placeholder-val="">{{ customerDetail.manager }}</sc-if>
+                    <sc-if value="{{ customerDetail.noManager }}" hint-placeholder-val="{{ false }}"><span style="color:#b45309;font-weight:600">Chưa phân công</span></sc-if>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="lc-statgrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:14px">
+              <sc-for list="{{ customerDetail.stats }}" as="s" hint-placeholder-count="4">
+                <div style="background:#fff;border:1px solid #e8edf3;border-radius:12px;padding:14px 16px"><div style="font-size:12px;color:#64748b">{{ s.label }}</div><div style="font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:4px;color:{{ s.accent }}">{{ s.value }}</div><div style="font-size:11px;color:#94a3b8">{{ s.sub }}</div></div>
+              </sc-for>
+            </div>
+            <div class="lc-dash2" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start">
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:16px 18px">
+                  <div style="font-size:14px;font-weight:700;margin-bottom:11px">Dự án &amp; Xưởng</div>
+                  <sc-for list="{{ customerDetail.projects }}" as="p" hint-placeholder-count="2">
+                    <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid #f1f5f9"><span style="flex:1;font-size:13px;font-weight:600">{{ p.name }}</span><span style="font-size:12px;color:#94a3b8">{{ p.manager }}</span><span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;background:{{ p.sBg }};color:{{ p.sFg }}">{{ p.statusLabel }}</span></div>
+                  </sc-for>
+                  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:11px;border-top:1px solid #f1f5f9">
+                    <sc-for list="{{ customerDetail.workshops }}" as="w" hint-placeholder-count="2"><span style="font-size:11.5px;color:#475569;background:#f1f5f9;padding:4px 9px;border-radius:6px">{{ w.name }}</span></sc-for>
+                  </div>
+                </div>
+                <sc-if value="{{ customerDetail.hasPolicies }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:16px 18px">
+                    <div style="font-size:14px;font-weight:700;margin-bottom:11px">Chính sách tuyển dụng</div>
+                    <sc-for list="{{ customerDetail.policies }}" as="p" hint-placeholder-count="1">
+                      <div style="padding:9px 0;border-top:1px solid #f1f5f9"><div style="display:flex;align-items:center;gap:8px"><span style="flex:1;font-size:13px;font-weight:600">{{ p.workshop }}</span><span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;background:{{ p.sBg }};color:{{ p.sFg }}">{{ p.status }}</span></div><div style="font-size:12px;color:#64748b;margin-top:3px">Đơn giá {{ p.price }} · Lương CB {{ p.salary }}</div></div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <sc-if value="{{ customerDetail.hasRecv }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:16px 18px">
+                    <div style="font-size:14px;font-weight:700;margin-bottom:6px">Công nợ</div>
+                    <sc-for list="{{ customerDetail.receivables }}" as="r" hint-placeholder-count="2">
+                      <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid #f1f5f9"><span style="font-size:13px;font-weight:600;font-family:'IBM Plex Mono',monospace">{{ r.period }}</span><span style="flex:1"></span><span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;background:{{ r.agBg }};color:{{ r.agFg }}">{{ r.agingLabel }}</span><span style="font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;width:64px;text-align:right">{{ r.remaining }}</span></div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ customerDetail.hasCare }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:16px 18px">
+                    <div style="font-size:14px;font-weight:700;margin-bottom:6px">Lịch sử chăm sóc</div>
+                    <sc-for list="{{ customerDetail.care }}" as="t" hint-placeholder-count="2">
+                      <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid #f1f5f9"><span style="flex:1;font-size:13px">{{ t.type }}</span><span style="font-size:12px;color:#94a3b8;font-variant-numeric:tabular-nums">{{ t.planned }}</span><span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;background:{{ t.sBg }};color:{{ t.sFg }}">{{ t.statusLabel }}</span></div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </sc-if>
+
+        </sc-if>
+
+        <sc-if value="{{ isCare }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+            <sc-for list="{{ careTabs }}" as="t" hint-placeholder-count="4">
+              <button onClick="{{ t.onSelect }}" style="display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid {{ t.bd }};border-radius:9px;background:{{ t.bg }};color:{{ t.fg }};font-size:13px;font-weight:600;cursor:pointer">{{ t.label }}<span style="font-size:11.5px;font-weight:700;background:{{ t.cbg }};color:{{ t.cfg }};min-width:18px;height:18px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;padding:0 5px;font-variant-numeric:tabular-nums">{{ t.count }}</span></button>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ careEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:52px 24px;text-align:center">
+              <div style="width:50px;height:50px;border-radius:13px;background:#dcfce7;color:#16a34a;display:flex;align-items:center;justify-content:center;margin:0 auto 13px"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></div>
+              <div style="font-size:15.5px;font-weight:600">{{ careEmptyText }}</div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ careHasRows }}" hint-placeholder-val="{{ true }}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:13px">
+              <sc-for list="{{ careCards }}" as="c" hint-placeholder-count="4">
+                <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:15px 16px;display:flex;flex-direction:column">
+                  <div style="display:flex;align-items:flex-start;gap:11px;margin-bottom:12px">
+                    <span style="width:38px;height:38px;border-radius:10px;background:{{ c.sBg }};color:{{ c.sFg }};display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ c.typeIcon }}"></path></svg></span>
+                    <div style="flex:1;min-width:0">
+                      <div style="font-size:14.5px;font-weight:700;line-height:1.25">{{ c.customer }}</div>
+                      <div style="font-size:12px;color:#64748b;margin-top:2px">{{ c.type }} · {{ c.freq }}</div>
+                    </div>
+                    <span style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:{{ c.sBg }};color:{{ c.sFg }};white-space:nowrap"><span style="width:6px;height:6px;border-radius:50%;background:{{ c.sDot }}"></span>{{ c.statusLabel }}</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:14px;font-size:12px;color:#64748b;margin-bottom:13px">
+                    <span style="display:flex;align-items:center;gap:5px"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="4.5" width="17" height="16" rx="2"></rect><path d="M3.5 9h17M8 3v3M16 3v3"></path></svg>{{ c.planned }}</span>
+                    <span style="display:flex;align-items:center;gap:5px"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21v-1a6 6 0 0112 0v1"></path></svg>{{ c.manager }}</span>
+                  </div>
+                  <sc-if value="{{ c.canAct }}" hint-placeholder-val="{{ true }}">
+                    <div style="display:flex;gap:8px;margin-top:auto">
+                      <button onClick="{{ c.onStart }}" style="flex:1;padding:8px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;color:#475569;font-size:13px;font-weight:600;cursor:pointer" style-hover="background:#f8fafc">Bắt đầu</button>
+                      <button onClick="{{ c.onComplete }}" style="flex:1;padding:8px;border:0;border-radius:8px;background:var(--ac);color:#fff;font-size:13px;font-weight:600;cursor:pointer" style-hover="background:color-mix(in srgb,var(--ac),#000 8%)">Hoàn thành</button>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{ isReceivables }}" hint-placeholder-val="{{ false }}">
+          <div class="lc-statgrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:15px">
+            <sc-for list="{{ recCards }}" as="c" hint-placeholder-count="4">
+              <div style="background:#fff;border:1px solid #e8edf3;border-radius:12px;padding:15px 16px"><div style="font-size:12.5px;color:#64748b">{{ c.label }}</div><div style="font-size:24px;font-weight:700;letter-spacing:-.5px;margin-top:5px;font-variant-numeric:tabular-nums;color:{{ c.color }}">{{ c.value }}</div><div style="font-size:11.5px;color:#94a3b8;margin-top:1px">{{ c.sub }}</div></div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:14px">
+            <div style="position:relative;flex:1;min-width:180px;max-width:280px">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#94a3b8" stroke-width="1.9" stroke-linecap="round" style="position:absolute;left:11px;top:50%;transform:translateY(-50%)"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+              <input value="{{ recQ }}" onInput="{{ onRecQ }}" placeholder="Tìm khách hàng…" style="width:100%;padding:9px 11px 9px 34px;border:1px solid #e2e8f0;border-radius:9px;font-size:13px;background:#fff;color:#334155"/>
+            </div>
+            <select value="{{ recStage }}" onChange="{{ onRecStage }}" style="padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13px;background:#fff;color:#334155;cursor:pointer"><sc-for list="{{ recStageOpts }}" as="o" hint-placeholder-count="4"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></select>
+          </div>
+
+          <sc-if value="{{ recEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;padding:48px 24px;text-align:center"><div style="font-size:15px;font-weight:600">Không có công nợ phù hợp bộ lọc</div></div>
+          </sc-if>
+
+          <sc-if value="{{ recHasRows }}" hint-placeholder-val="{{ true }}">
+            <div class="lc-desktoponly" style="background:#fff;border:1px solid #e8edf3;border-radius:13px;overflow:hidden">
+              <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;min-width:880px">
+                <thead><tr style="background:#fbfcfe">
+                  <th style="text-align:left;padding:11px 16px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Khách hàng</th>
+                  <th style="text-align:left;padding:11px 12px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Kỳ</th>
+                  <th style="text-align:right;padding:11px 12px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Số tiền</th>
+                  <th style="text-align:right;padding:11px 12px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Còn lại</th>
+                  <th style="text-align:right;padding:11px 12px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Quá hạn</th>
+                  <th style="text-align:left;padding:11px 12px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Tuổi nợ</th>
+                  <th style="text-align:left;padding:11px 12px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3">Thu tiền</th>
+                  <th style="width:120px;border-bottom:1px solid #e8edf3"></th>
+                </tr></thead>
+                <tbody>
+                  <sc-for list="{{ recRows }}" as="r" hint-placeholder-count="6">
+                    <tr style-hover="background:#f8fafc">
+                      <td style="padding:{{ r.py }} 16px;border-bottom:1px solid #f1f5f9;font-size:13px;font-weight:600;white-space:nowrap">{{ r.customer }}</td>
+                      <td style="padding:{{ r.py }} 12px;border-bottom:1px solid #f1f5f9;font-size:12.5px;color:#475569;font-family:'IBM Plex Mono',monospace;white-space:nowrap">{{ r.period }}</td>
+                      <td style="padding:{{ r.py }} 12px;border-bottom:1px solid #f1f5f9;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;color:#64748b">{{ r.amount }}</td>
+                      <td style="padding:{{ r.py }} 12px;border-bottom:1px solid #f1f5f9;font-size:13.5px;text-align:right;font-variant-numeric:tabular-nums;font-weight:700">{{ r.remaining }}</td>
+                      <td style="padding:{{ r.py }} 12px;border-bottom:1px solid #f1f5f9;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;color:{{ r.overdueColor }}">{{ r.overdue }}</td>
+                      <td style="padding:{{ r.py }} 12px;border-bottom:1px solid #f1f5f9"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:20px;background:{{ r.agBg }};color:{{ r.agFg }};white-space:nowrap">{{ r.agingLabel }}<sc-if value="{{ r.overridden }}" hint-placeholder-val="{{ false }}"><span title="Đã override" style="font-size:9px">✎</span></sc-if></span></td>
+                      <td style="padding:{{ r.py }} 12px;border-bottom:1px solid #f1f5f9"><span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#475569"><span style="width:7px;height:7px;border-radius:50%;background:{{ r.stDot }}"></span>{{ r.statusLabel }}</span></td>
+                      <td style="padding:{{ r.py }} 12px;border-bottom:1px solid #f1f5f9;text-align:right">
+                        <sc-if value="{{ r.paid }}" hint-placeholder-val="{{ false }}"><span style="font-size:12.5px;color:#16a34a;font-weight:600;white-space:nowrap">✓ Đã thu đủ</span></sc-if>
+                        <sc-if value="{{ r.notPaid }}" hint-placeholder-val="{{ true }}"><button onClick="{{ r.onCollect }}" style="display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border:1px solid color-mix(in srgb,var(--ac) 30%,#e2e8f0);border-radius:8px;background:color-mix(in srgb,var(--ac) 7%,#fff);color:var(--ac);font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:color-mix(in srgb,var(--ac) 13%,#fff)">Ghi nhận thu</button></sc-if>
+                      </td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table></div>
+            </div>
+
+            <div class="lc-mobile" style="flex-direction:column;gap:10px">
+              <sc-for list="{{ recRows }}" as="r" hint-placeholder-count="4">
+                <div style="background:#fff;border:1px solid #e8edf3;border-radius:12px;padding:13px 14px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px"><div><div style="font-size:14px;font-weight:700">{{ r.customer }}</div><div style="font-size:11.5px;color:#94a3b8;font-family:'IBM Plex Mono',monospace">{{ r.period }}</div></div><span style="font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:20px;background:{{ r.agBg }};color:{{ r.agFg }}">{{ r.agingLabel }}</span></div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px"><span style="font-size:12px;color:#64748b">Còn lại</span><span style="font-size:16px;font-weight:700;font-variant-numeric:tabular-nums">{{ r.remaining }}</span></div>
+                  <button onClick="{{ r.onCollect }}" style="width:100%;padding:9px;border:0;border-radius:8px;background:var(--ac);color:#fff;font-size:13px;font-weight:600;cursor:pointer">Ghi nhận thu</button>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{ isMaster }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+            <sc-for list="{{ masterTabs }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.onSelect }}" style="padding:8px 16px;border:1px solid {{ t.bd }};border-radius:9px;background:{{ t.bg }};color:{{ t.fg }};font-size:13px;font-weight:600;cursor:pointer">{{ t.label }}</button></sc-for>
+          </div>
+          <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;overflow:hidden">
+            <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;min-width:680px">
+              <thead><tr style="background:#fbfcfe"><sc-for list="{{ masterCols }}" as="c" hint-placeholder-count="5"><th style="text-align:left;padding:11px 16px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3;white-space:nowrap">{{ c }}</th></sc-for></tr></thead>
+              <tbody>
+                <sc-for list="{{ masterRows }}" as="r" hint-placeholder-count="6">
+                  <tr style-hover="background:#f8fafc">
+                    <sc-for list="{{ r.cells }}" as="cell" hint-placeholder-count="4"><td style="padding:11px 16px;border-bottom:1px solid #f1f5f9;font-size:13px;font-weight:{{ cell.weight }};color:{{ cell.color }};white-space:nowrap">{{ cell.v }}</td></sc-for>
+                    <td style="padding:11px 16px;border-bottom:1px solid #f1f5f9"><span style="font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:20px;background:{{ r.bBg }};color:{{ r.bFg }};white-space:nowrap">{{ r.badge }}</span></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table></div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+            <sc-for list="{{ settingsTabs }}" as="t" hint-placeholder-count="2"><button onClick="{{ t.onSelect }}" style="padding:8px 16px;border:1px solid {{ t.bd }};border-radius:9px;background:{{ t.bg }};color:{{ t.fg }};font-size:13px;font-weight:600;cursor:pointer">{{ t.label }}</button></sc-for>
+            <div style="flex:1"></div>
+            <button style="display:flex;align-items:center;gap:6px;padding:9px 14px;border:1px solid #e2e8f0;border-radius:9px;background:#fff;color:#475569;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:#f8fafc"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Thêm mới</button>
+          </div>
+          <div style="background:#fff;border:1px solid #e8edf3;border-radius:13px;overflow:hidden">
+            <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;min-width:720px">
+              <thead><tr style="background:#fbfcfe"><sc-for list="{{ settingsCols }}" as="c" hint-placeholder-count="5"><th style="text-align:left;padding:11px 16px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e8edf3;white-space:nowrap">{{ c }}</th></sc-for></tr></thead>
+              <tbody>
+                <sc-for list="{{ settingsRows }}" as="r" hint-placeholder-count="8">
+                  <tr style-hover="background:#f8fafc">
+                    <sc-for list="{{ r.cells }}" as="cell" hint-placeholder-count="5"><td style="padding:10px 16px;border-bottom:1px solid #f1f5f9;font-size:13px;font-weight:{{ cell.weight }};color:{{ cell.color }};white-space:nowrap">{{ cell.v }}</td></sc-for>
+                    <td style="padding:10px 16px;border-bottom:1px solid #f1f5f9"><span style="font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:20px;background:{{ r.bBg }};color:{{ r.bFg }};white-space:nowrap">{{ r.badge }}</span></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table></div>
+          </div>
+        </sc-if>
+
+        <!--SCREENS-->
+
+      </div>
+    </main>
+
+    <nav class="lc-bottomnav" style="position:fixed;left:0;right:0;bottom:0;height:64px;background:#fff;border-top:1px solid #e8edf3;z-index:40;justify-content:space-around;align-items:stretch;padding:0 2px">
+      <sc-for list="{{ mobileNav }}" as="m" hint-placeholder-count="5">
+        <button onClick="{{ m.onSelect }}" style="flex:1;border:0;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:{{ m.color }};position:relative">
+          <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="{{ m.icon }}"></path></svg>
+          <span style="font-size:10.5px;font-weight:{{ m.weight }}">{{ m.label }}</span>
+          <sc-if value="{{ m.badge }}" hint-placeholder-val=""><span style="position:absolute;top:6px;right:50%;margin-right:-20px;background:#dc2626;color:#fff;font-size:9px;font-weight:700;min-width:15px;height:15px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px">{{ m.badge }}</span></sc-if>
+        </button>
+      </sc-for>
+    </nav>
+
+  </div>
+
+  <sc-if value="{{ modal }}" hint-placeholder-val="">
+    <div class="lc-modal" onClick="{{ closeModal }}" style="position:fixed;inset:0;background:rgba(15,23,42,.46);backdrop-filter:blur(2px);z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;animation:lcfade .14s ease">
+      <div class="lc-modalcard" onClick="{{ stop }}" style="background:#fff;border-radius:15px;max-width:{{ modal.width }};width:100%;max-height:88vh;overflow:auto;box-shadow:0 28px 70px rgba(15,23,42,.32);animation:lcfade .2s ease">
+
+        <sc-if value="{{ modalIsNav }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:15px 18px;border-bottom:1px solid #eef2f7;display:flex;align-items:center;justify-content:space-between">
+            <div style="font-size:15px;font-weight:700">Tất cả mục</div>
+            <button onClick="{{ closeModal }}" style="border:0;background:#f1f5f9;width:30px;height:30px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+          </div>
+          <div style="padding:10px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+            <sc-for list="{{ modalNavItems }}" as="m" hint-placeholder-count="6">
+              <button onClick="{{ m.onSelect }}" style="display:flex;flex-direction:column;gap:8px;border:1px solid #eef2f7;background:{{ m.bg }};cursor:pointer;padding:14px 12px;border-radius:11px;text-align:left">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="{{ m.fg }}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ m.icon }}"></path></svg>
+                <span style="font-size:13px;font-weight:600;color:#0f172a">{{ m.label }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ modalIsReport }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:16px 20px;border-bottom:1px solid #eef2f7;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:2">
+            <div>
+              <div style="font-size:16px;font-weight:700">{{ reportForm.title }}</div>
+              <div style="font-size:12px;color:#94a3b8">Tự tính tuần từ ngày báo cáo · chặn phễu sai</div>
+            </div>
+            <button onClick="{{ closeModal }}" style="border:0;background:#f1f5f9;width:30px;height:30px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+          </div>
+          <div style="padding:18px 20px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px">
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px">Ngày báo cáo</label>
+                <input type="date" value="{{ reportForm.date }}" onInput="{{ reportForm.onDate }}" style="width:100%;padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13.5px;color:#0f172a;background:#fff"/>
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px">Tuần (tự tính)</label>
+                <div style="padding:9px 11px;border:1px dashed #d8dee8;border-radius:9px;font-size:13.5px;color:#64748b;background:#f8fafc">{{ reportForm.weekText }}</div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px">
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px">Dự án *</label>
+                <select value="{{ reportForm.project_id }}" onChange="{{ reportForm.onProject }}" style="width:100%;padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13.5px;color:#0f172a;background:#fff;cursor:pointer">
+                  <option value="">— Chọn dự án —</option>
+                  <sc-for list="{{ reportForm.projOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+                </select>
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px">Xưởng</label>
+                <select value="{{ reportForm.workshop_id }}" onChange="{{ reportForm.onWs }}" disabled="{{ reportForm.wsDisabled }}" style="width:100%;padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13.5px;color:#0f172a;background:#fff;cursor:pointer">
+                  <option value="">— Không chọn —</option>
+                  <sc-for list="{{ reportForm.wsOpts }}" as="o" hint-placeholder-count="2"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+                </select>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:16px">
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px">Chuyên viên *</label>
+                <select value="{{ reportForm.specialist_staff_id }}" onChange="{{ reportForm.onSpv }}" disabled="{{ reportForm.spvLocked }}" style="width:100%;padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13.5px;color:#0f172a;background:#fff;cursor:pointer">
+                  <option value="">— Chọn chuyên viên —</option>
+                  <sc-for list="{{ reportForm.spvOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+                </select>
+              </div>
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px">Phương thức</label>
+                <select value="{{ reportForm.method }}" onChange="{{ reportForm.onMethod }}" style="width:100%;padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13.5px;color:#0f172a;background:#fff;cursor:pointer">
+                  <option value="direct">Trực tiếp</option><option value="partner">Cộng tác viên</option><option value="internal">Nội bộ</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="font-size:11.5px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px">Phễu tuyển dụng</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">
+              <div><label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px">Đăng ký</label><input type="number" min="0" value="{{ reportForm.registered }}" onInput="{{ reportForm.onReg }}" style="width:100%;padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:14px;color:#0f172a;background:#fff;font-variant-numeric:tabular-nums"/></div>
+              <div><label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px">Phỏng vấn</label><input type="number" min="0" value="{{ reportForm.interviewed }}" onInput="{{ reportForm.onIntv }}" style="width:100%;padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:14px;color:#0f172a;background:#fff;font-variant-numeric:tabular-nums"/></div>
+              <div><label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px">Đỗ PV</label><input type="number" min="0" value="{{ reportForm.passed_interview }}" onInput="{{ reportForm.onPass }}" style="width:100%;padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:14px;color:#0f172a;background:#fff;font-variant-numeric:tabular-nums"/></div>
+              <div><label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px">Đi làm</label><input type="number" min="0" value="{{ reportForm.started_work }}" onInput="{{ reportForm.onStart }}" style="width:100%;padding:9px 11px;border:2px solid color-mix(in srgb,var(--ac) 35%,#e2e8f0);border-radius:9px;font-size:14px;color:#0f172a;background:#fff;font-weight:600;font-variant-numeric:tabular-nums"/></div>
+            </div>
+
+            <sc-if value="{{ reportForm.hasWarn }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:9px;padding:10px 12px;margin-bottom:14px">
+                <sc-for list="{{ reportForm.warnings }}" as="w" hint-placeholder-count="1">
+                  <div style="display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:#92400e"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" style="flex:0 0 auto;margin-top:1px"><path d="M10.3 3.9 1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0zM12 9v4M12 17h.01"></path></svg><span>{{ w }}</span></div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <div style="margin-bottom:4px"><label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px">Ghi chú</label><textarea value="{{ reportForm.note }}" onInput="{{ reportForm.onNote }}" rows="2" placeholder="Tùy chọn…" style="width:100%;padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13.5px;color:#0f172a;background:#fff;resize:vertical;font-family:inherit"></textarea></div>
+          </div>
+          <div style="padding:14px 20px;border-top:1px solid #eef2f7;display:flex;gap:10px;justify-content:flex-end;position:sticky;bottom:0;background:#fff">
+            <button onClick="{{ closeModal }}" style="padding:9px 16px;border:1px solid #e2e8f0;border-radius:9px;background:#fff;color:#475569;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="background:#f8fafc">Hủy</button>
+            <button onClick="{{ reportForm.onSave }}" style="display:flex;align-items:center;gap:7px;padding:9px 18px;border:0;border-radius:9px;background:var(--ac);color:#fff;font-size:13.5px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px color-mix(in srgb,var(--ac) 35%,transparent)" style-hover="background:color-mix(in srgb,var(--ac),#000 8%)"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"></path></svg>Lưu báo cáo</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ modalIsCare }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:16px 20px;border-bottom:1px solid #eef2f7;display:flex;align-items:center;justify-content:space-between">
+            <div><div style="font-size:16px;font-weight:700">Hoàn thành chăm sóc</div><div style="font-size:12.5px;color:#94a3b8">{{ careForm.customer }} · {{ careForm.type }}</div></div>
+            <button onClick="{{ closeModal }}" style="border:0;background:#f1f5f9;width:30px;height:30px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+          </div>
+          <div style="padding:18px 20px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px">Kết quả</label>
+            <select value="{{ careForm.result }}" onChange="{{ careForm.onResult }}" style="width:100%;padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13.5px;color:#0f172a;background:#fff;cursor:pointer;margin-bottom:14px"><option value="reached">Đã liên hệ được</option><option value="met">Đã gặp mặt</option><option value="no_answer">Không liên hệ được</option><option value="rescheduled">Hẹn lại</option></select>
+            <label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px">Nội dung trao đổi</label>
+            <textarea value="{{ careForm.content }}" onInput="{{ careForm.onContent }}" rows="3" placeholder="Ghi lại nội dung, cam kết, vấn đề phát sinh…" style="width:100%;padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13.5px;color:#0f172a;background:#fff;resize:vertical;font-family:inherit"></textarea>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:12px;font-size:12px;color:#64748b;background:#f8fafc;border-radius:8px;padding:9px 11px"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg>Hệ thống sẽ tự sinh lịch chăm sóc kế tiếp theo tần suất.</div>
+          </div>
+          <div style="padding:14px 20px;border-top:1px solid #eef2f7;display:flex;gap:10px;justify-content:flex-end">
+            <button onClick="{{ closeModal }}" style="padding:9px 16px;border:1px solid #e2e8f0;border-radius:9px;background:#fff;color:#475569;font-size:13.5px;font-weight:600;cursor:pointer">Hủy</button>
+            <button onClick="{{ careForm.onSubmit }}" style="display:flex;align-items:center;gap:7px;padding:9px 18px;border:0;border-radius:9px;background:var(--ac);color:#fff;font-size:13.5px;font-weight:600;cursor:pointer"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"></path></svg>Lưu &amp; sinh lịch kế tiếp</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ modalIsColl }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:16px 20px;border-bottom:1px solid #eef2f7;display:flex;align-items:center;justify-content:space-between">
+            <div><div style="font-size:16px;font-weight:700">Ghi nhận thu tiền</div><div style="font-size:12.5px;color:#94a3b8">{{ collForm.customer }} · {{ collForm.period }}</div></div>
+            <button onClick="{{ closeModal }}" style="border:0;background:#f1f5f9;width:30px;height:30px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+          </div>
+          <div style="padding:18px 20px">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
+              <div style="background:#f8fafc;border-radius:9px;padding:11px 12px"><div style="font-size:11px;color:#94a3b8">Tổng nợ</div><div style="font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px">{{ collForm.amount }}</div></div>
+              <div style="background:#f8fafc;border-radius:9px;padding:11px 12px"><div style="font-size:11px;color:#94a3b8">Đã thu</div><div style="font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px;color:#16a34a">{{ collForm.collected }}</div></div>
+              <div style="background:#f8fafc;border-radius:9px;padding:11px 12px"><div style="font-size:11px;color:#94a3b8">Còn lại</div><div style="font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px">{{ collForm.remaining }}</div></div>
+            </div>
+            <div style="display:flex;align-items:flex-end;gap:10px;margin-bottom:14px">
+              <div style="flex:1"><label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px">Số tiền thu</label><input type="number" min="0" value="{{ collForm.inputAmount }}" onInput="{{ collForm.onAmount }}" placeholder="0" style="width:100%;padding:10px 12px;border:2px solid color-mix(in srgb,var(--ac) 35%,#e2e8f0);border-radius:9px;font-size:15px;font-weight:600;color:#0f172a;background:#fff;font-variant-numeric:tabular-nums"/></div>
+              <button onClick="{{ collForm.onFull }}" style="padding:10px 13px;border:1px solid #e2e8f0;border-radius:9px;background:#fff;color:#475569;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:#f8fafc">Thu toàn bộ</button>
+            </div>
+            <sc-if value="{{ collForm.canOverride }}" hint-placeholder-val="{{ false }}">
+              <div style="border-top:1px solid #eef2f7;padding-top:14px;margin-bottom:4px">
+                <label style="display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:5px">Override giai đoạn thu hồi <span style="color:#94a3b8;font-weight:400">· quyền BM/ADMIN</span></label>
+                <select value="{{ collForm.override }}" onChange="{{ collForm.onOverride }}" style="width:100%;padding:9px 11px;border:1px solid #e2e8f0;border-radius:9px;font-size:13.5px;color:#0f172a;background:#fff;cursor:pointer"><option value="">— Giữ tự động —</option><option value="remind_1">Nhắc 1</option><option value="remind_2">Nhắc 2</option><option value="official_letter">Gửi công văn</option><option value="negotiation">Đàm phán</option><option value="legal">Chuyển pháp lý</option></select>
+              </div>
+            </sc-if>
+          </div>
+          <div style="padding:14px 20px;border-top:1px solid #eef2f7;display:flex;gap:10px;justify-content:flex-end">
+            <button onClick="{{ closeModal }}" style="padding:9px 16px;border:1px solid #e2e8f0;border-radius:9px;background:#fff;color:#475569;font-size:13.5px;font-weight:600;cursor:pointer">Hủy</button>
+            <button onClick="{{ collForm.onSubmit }}" style="display:flex;align-items:center;gap:7px;padding:9px 18px;border:0;border-radius:9px;background:var(--ac);color:#fff;font-size:13.5px;font-weight:600;cursor:pointer"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"></path></svg>Ghi nhận</button>
+          </div>
+        </sc-if>
+
+        <!--MODALS-->
+
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="">
+    <div class="lc-toast" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:80;background:#0e1726;color:#fff;padding:11px 18px;border-radius:11px;font-size:13.5px;font-weight:500;box-shadow:0 14px 34px rgba(15,23,42,.38);display:flex;align-items:center;gap:10px;animation:lctoast .22s ease;max-width:90vw">
+      <span style="width:8px;height:8px;border-radius:50%;background:{{ toast.color }};flex:0 0 auto"></span><span>{{ toast.text }}</span>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#2563eb&quot;,&quot;options&quot;:[&quot;#2563eb&quot;,&quot;#0f766e&quot;,&quot;#4338ca&quot;,&quot;#b91c1c&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Giao diện&quot;},&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;comfortable&quot;,&quot;options&quot;:[&quot;comfortable&quot;,&quot;compact&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Giao diện&quot;},&quot;bilingual&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Giao diện&quot;},&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;auto&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;mobile&quot;,&quot;desktop&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Bố cục&quot;},&quot;initialNav&quot;:{&quot;editor&quot;:null,&quot;default&quot;:&quot;dashboard&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;initialRole&quot;:{&quot;editor&quot;:null,&quot;default&quot;:&quot;OM&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.today = '2026-06-26';
+    this.C = {
+      green:{bg:'#dcfce7',fg:'#15803d',sol:'#16a34a'},
+      blue:{bg:'#dbeafe',fg:'#1d4ed8',sol:'#2563eb'},
+      amber:{bg:'#fef3c7',fg:'#b45309',sol:'#d97706'},
+      orange:{bg:'#ffedd5',fg:'#c2410c',sol:'#ea580c'},
+      red:{bg:'#fee2e2',fg:'#b91c1c',sol:'#dc2626'},
+      gray:{bg:'#eef2f7',fg:'#475569',sol:'#64748b'},
+      teal:{bg:'#ccfbf1',fg:'#0f766e',sol:'#14b8a6'},
+      violet:{bg:'#ede9fe',fg:'#6d28d9',sol:'#7c3aed'}
+    };
+    this.ICON = {
+      GRID:'M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z',
+      DOC:'M7 3h7l4 4v13a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1zM14 3v4h4M9 13h6M9 17h4',
+      BARS:'M3 21h18M7 21V9M12 21V4M17 21v-7',
+      TARGET:'M12 3a9 9 0 100 18 9 9 0 000-18zM12 7a5 5 0 100 10 5 5 0 000-10zM12 11a1 1 0 100 2 1 1 0 000-2z',
+      USERS:'M17 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9.5 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75',
+      PHONE:'M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3-8.6A2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.3 1.8.6 2.7a2 2 0 01-.5 2.1L8 10a16 16 0 006 6l1.4-1.1a2 2 0 012.1-.5c.9.3 1.8.5 2.7.6a2 2 0 011.7 2z',
+      CARD:'M3 6h18a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V7a1 1 0 011-1zM2 10h20',
+      LAYERS:'M12 2l9 5-9 5-9-5 9-5zM3 12l9 5 9-5M3 17l9 5 9-5',
+      GEAR:'M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 13a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-1.8-.3 1.6 1.6 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.6 1.6 0 00-1-1.5 1.6 1.6 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.6 1.6 0 00.3-1.8 1.6 1.6 0 00-1.5-1H3a2 2 0 110-4h.1a1.6 1.6 0 001.5-1 1.6 1.6 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.6 1.6 0 001.8.3H9a1.6 1.6 0 001-1.5V3a2 2 0 114 0v.1a1.6 1.6 0 001 1.5 1.6 1.6 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 00-.3 1.8V9a1.6 1.6 0 001.5 1H21a2 2 0 110 4h-.1a1.6 1.6 0 00-1.5 1z',
+      TREND:'M3 17l6-6 4 4 8-8M21 7h-5M21 7v5',
+      MONEY:'M12 1v22M16 6H9a3 3 0 000 6h6a3 3 0 010 6H7',
+      ALERT:'M10.3 3.9 1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0zM12 9v4M12 17h.01',
+      CLOCK:'M12 3a9 9 0 100 18 9 9 0 000-18zM12 7v5l3 2',
+      CHECK:'M20 6L9 17l-5-5',
+      HOME:'M3 11l9-8 9 8M5 10v10a1 1 0 001 1h12a1 1 0 001-1V10',
+      MORE:'M4 6h16M4 12h16M4 18h16',
+      SEARCH:'M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.3-4.3'
+    };
+    const all=['ADMIN','BOD','BM','OM','SPV'];
+    this.NAV=[
+      {key:'dashboard',label:'Tổng quan',icon:this.ICON.GRID,roles:all},
+      {key:'daily',label:'Báo cáo ngày',icon:this.ICON.DOC,roles:all},
+      {key:'kpi',label:'KPI tuần',icon:this.ICON.BARS,roles:all},
+      {key:'demand',label:'Nhu cầu tuần',icon:this.ICON.TARGET,roles:all},
+      {key:'customers',label:'Khách hàng',icon:this.ICON.USERS,roles:all},
+      {key:'care',label:'Chăm sóc',icon:this.ICON.PHONE,roles:['ADMIN','BOD','BM','OM']},
+      {key:'receivables',label:'Công nợ',icon:this.ICON.CARD,roles:['ADMIN','BOD','BM','OM']},
+      {key:'master',label:'Dữ liệu nền',icon:this.ICON.LAYERS,roles:all},
+      {key:'settings',label:'Cấu hình',icon:this.ICON.GEAR,roles:['ADMIN']}
+    ];
+    this.db = this.buildData();
+    this.setRoot=(el)=>{ this._root=el; };
+    this.state = {
+      role:(props&&props.initialRole)||'OM', nav:(props&&props.initialNav)||'dashboard', week:'2026-W26', branchFilter:'all',
+      roleMenu:false, weekMenu:false, branchMenu:false,
+      modal:null, toast:null,
+      dailyProject:'all', dailyMethod:'all', dailyQ:'',
+      kpiMismatch:false, kpiSort:'fill',
+      demandEdits:{},
+      customerType:'all', customerQ:'', selectedCustomer:null, customerTab:'overview',
+      careTab:'today',
+      recStage:'all', recQ:'',
+      masterTab:'projects',
+      settingsTab:'users'
+    };
+  }
+
+  componentDidMount(){ this.applyAccent(); this.setupResize(); }
+  componentDidUpdate(prevProps){ if(!prevProps || prevProps.accent!==this.props.accent) this.applyAccent(); this.applyMobileClass(); }
+  componentWillUnmount(){ try{ if(this._ro) this._ro.disconnect(); }catch(e){} }
+  applyAccent(){ try{ const a=(this.props&&this.props.accent)||'#2563eb'; document.documentElement.style.setProperty('--ac', a); }catch(e){} }
+  setupResize(){ try{ if(this._root && window.ResizeObserver){ this._ro=new ResizeObserver(()=>this.applyMobileClass()); this._ro.observe(this._root); } this.applyMobileClass(); }catch(e){} }
+  applyMobileClass(){ try{ if(!this._root) return; const v=this.props&&this.props.view; const w=this._root.offsetWidth||1200; const mobile = v==='mobile' || (v!=='desktop' && w<=820); this._root.classList.toggle('lc-m', mobile); }catch(e){} }
+
+  // ---------------- DATA ----------------
+  buildData(){
+    const pad=(n)=>('00000'+n).slice(-5);
+    const branches=[
+      {branch_id:'BR-01',branch_name:'Bắc Ninh',branch_name_zh:'北宁',region:'Miền Bắc',active:true},
+      {branch_id:'BR-02',branch_name:'Hải Phòng',branch_name_zh:'海防',region:'Miền Bắc',active:true},
+      {branch_id:'BR-03',branch_name:'Bình Dương',branch_name_zh:'平阳',region:'Miền Nam',active:true}
+    ];
+    const staff=[
+      ['NS-01','Trần Quốc Hùng','BM','BR-01',null,'official'],
+      ['NS-02','Nguyễn Thị Lan','OM','BR-01','NS-01','official'],
+      ['NS-03','Lê Văn Nam','SPV','BR-01','NS-02','official'],
+      ['NS-04','Phạm Thị Hoa','SPV','BR-01','NS-02','official'],
+      ['NS-05','Hoàng Minh Tuấn','SPV','BR-01','NS-02','probation'],
+      ['NS-06','Vũ Đình Khoa','OM','BR-01','NS-01','official'],
+      ['NS-07','Đỗ Thị Mai','SPV','BR-01','NS-06','official'],
+      ['NS-08','Bùi Thanh Sơn','BM','BR-02',null,'official'],
+      ['NS-09','Ngô Thu Hà','OM','BR-02','NS-08','official'],
+      ['NS-10','Đặng Văn Long','SPV','BR-02','NS-09','official'],
+      ['NS-11','Lý Gia Bảo','BM','BR-03',null,'official'],
+      ['NS-12','Trịnh Thị Quỳnh','OM','BR-03','NS-11','official'],
+      ['NS-13','Mai Văn Phúc','SPV','BR-03','NS-12','official']
+    ].map(s=>({staff_id:s[0],full_name:s[1],role_business:s[2],branch_id:s[3],manager_staff_id:s[4],status:s[5],email:s[0].toLowerCase().replace('ns-','nv')+'@labor.vn',active:true}));
+    const customers=[
+      ['KH-01','Foxconn Bắc Ninh','富士康(北宁)','BR-01','key','NS-02'],
+      ['KH-02','Goertek Vina','歌尔越南','BR-01','key','NS-02'],
+      ['KH-03','Luxshare-ICT Vân Trung','立讯精密','BR-01','key','NS-06'],
+      ['KH-04','Canon Quế Võ','佳能','BR-01','regular','NS-06'],
+      ['KH-05','Amkor Technology','安靠科技','BR-01','regular',null],
+      ['KH-06','Pegatron Hải Phòng','和硕','BR-02','key','NS-09'],
+      ['KH-07','LG Display Hải Phòng','乐金显示','BR-02','key','NS-09'],
+      ['KH-08','Bridgestone VN','普利司通','BR-02','regular','NS-09'],
+      ['KH-09','BYD Việt Nam','比亚迪','BR-03','key','NS-12'],
+      ['KH-10','Esquel Garment','溢达纺织','BR-03','regular','NS-12']
+    ].map(c=>({customer_id:c[0],customer_name:c[1],customer_name_zh:c[2],branch_id:c[3],customer_type:c[4],manager_staff_id:c[5],service_type:'outsourcing',active:true}));
+    const projects=[
+      ['DA-01','Foxconn · CN lắp ráp','KH-01','NS-02','active'],
+      ['DA-02','Foxconn · CN dây chuyền SMT','KH-01','NS-02','active'],
+      ['DA-03','Goertek · CN điện tử','KH-02','NS-02','active'],
+      ['DA-04','Luxshare · CN dây chuyền','KH-03','NS-06','active'],
+      ['DA-05','Canon · CN đóng gói','KH-04','NS-06','active'],
+      ['DA-06','Pegatron · CN lắp ráp','KH-06','NS-09','active'],
+      ['DA-07','LG Display · CN sản xuất','KH-07','NS-09','active'],
+      ['DA-08','BYD · CN pin','KH-09','NS-12','active'],
+      ['DA-09','Esquel · CN may','KH-10','NS-12','paused'],
+      ['DA-10','Canon · CN mùa vụ Q2','KH-04','NS-06','ended']
+    ].map(p=>{const c=customers.find(x=>x.customer_id===p[2]); return {project_id:p[0],project_name:p[1],customer_id:p[2],branch_id:c.branch_id,manager_staff_id:p[3],status:p[4],service_type:'outsourcing'};});
+    const workshops=[
+      ['WS-01','Xưởng A1','DA-01'],['WS-02','Xưởng A2','DA-01'],['WS-03','Xưởng SMT-1','DA-02'],
+      ['WS-04','Phân xưởng GT-1','DA-03'],['WS-05','Line 1','DA-04'],['WS-06','Khu đóng gói','DA-05'],
+      ['WS-07','Lắp ráp B','DA-06'],['WS-08','Xưởng Panel','DA-07'],['WS-09','Pin Module','DA-08'],['WS-10','Chuyền may 3','DA-09']
+    ].map(w=>{const p=projects.find(x=>x.project_id===w[2]); return {workshop_id:w[0],workshop_name:w[1],project_id:w[2],customer_id:p.customer_id,status:'active',is_group:false};});
+    const projectStaff=[
+      ['DA-01','NS-03'],['DA-01','NS-04'],['DA-02','NS-03'],['DA-03','NS-04'],['DA-03','NS-05'],
+      ['DA-04','NS-07'],['DA-05','NS-07'],['DA-06','NS-10'],['DA-07','NS-10'],['DA-08','NS-13']
+    ].map(ps=>({project_id:ps[0],staff_id:ps[1],project_role:'specialist_1',active:true}));
+    const firstWs=(pid)=>{const w=workshops.find(x=>x.project_id===pid); return w?w.workshop_id:'';};
+    const projOf=(pid)=>projects.find(x=>x.project_id===pid);
+    const week='2026-W26';
+    const demandSpec=[['DA-01','NS-03',60,50],['DA-01','NS-04',45,40],['DA-02','NS-03',35,30],['DA-03','NS-04',50,45],['DA-03','NS-05',40,35],['DA-04','NS-07',30,25],['DA-05','NS-07',25,20],['DA-06','NS-10',45,40],['DA-07','NS-10',35,30],['DA-08','NS-13',40,35]];
+    const demands=demandSpec.map((d,i)=>{const p=projOf(d[0]); return {demand_id:'NC-'+pad(i+1),week,project_id:d[0],workshop_id:firstWs(d[0]),branch_id:p.branch_id,manager_staff_id:p.manager_staff_id,specialist_staff_id:d[1],customer_demand:d[2],assigned_kpi:d[3],created_by:'lan.nguyen@labor.vn'};});
+    const reportSpec=[['DA-01','NS-03',56,false],['DA-01','NS-04',33,true],['DA-02','NS-03',19,true],['DA-02','NS-04',14,false],['DA-03','NS-04',47,false],['DA-04','NS-07',21,false],['DA-05','NS-07',12,true],['DA-06','NS-10',44,false],['DA-07','NS-10',25,false],['DA-08','NS-13',38,false]];
+    const days=['2026-06-22','2026-06-23','2026-06-24','2026-06-25','2026-06-26'];
+    const w5=[0.18,0.2,0.24,0.22,0.16], w4=[0.22,0.25,0.28,0.25];
+    let reports=[]; let bc=1;
+    reportSpec.forEach((r,idx)=>{
+      const pid=r[0],sid=r[1],started=r[2],skipFri=r[3];
+      const conv=[0.5,0.46,0.48,0.52,0.5][idx%5];
+      const reg=Math.round(started/conv), intv=Math.round(reg*0.7), pass=Math.round(intv*0.86);
+      const dayList=skipFri?days.slice(0,4):days, ww=skipFri?w4:w5;
+      const split=(t)=>{let arr=ww.map(x=>Math.round(t*x)); arr[arr.length-1]+=t-arr.reduce((a,b)=>a+b,0); return arr;};
+      const sp={registered:split(reg),interviewed:split(intv),passed_interview:split(pass),started_work:split(started)};
+      const p=projOf(pid);
+      dayList.forEach((dt,di)=>{
+        reports.push({report_id:'BC-'+pad(bc++),date:dt,week,project_id:pid,workshop_id:firstWs(pid),branch_id:p.branch_id,specialist_staff_id:sid,method:['direct','partner','internal'][(idx+di)%3],registered:sp.registered[di],interviewed:sp.interviewed[di],passed_interview:sp.passed_interview[di],started_work:sp.started_work[di],created_by:'spv@labor.vn'});
+      });
+    });
+    const careTasks=[
+      ['CSK-01','KH-01','NS-02','meet','weekly','2026-06-26','pending'],
+      ['CSK-02','KH-02','NS-02','meet','weekly','2026-06-26','pending'],
+      ['CSK-03','KH-03','NS-06','meet','weekly','2026-06-23','in_progress'],
+      ['CSK-04','KH-04','NS-06','call','monthly','2026-06-20','pending'],
+      ['CSK-05','KH-05','NS-02','call','monthly','2026-06-30','pending'],
+      ['CSK-06','KH-06','NS-09','meet','weekly','2026-06-26','pending'],
+      ['CSK-07','KH-07','NS-09','meet','weekly','2026-06-27','pending'],
+      ['CSK-08','KH-09','NS-12','meet','weekly','2026-06-25','pending'],
+      ['CSK-09','KH-01','NS-02','meet','weekly','2026-06-19','done'],
+      ['CSK-10','KH-02','NS-02','meet','weekly','2026-06-12','done']
+    ].map(c=>{const cu=customers.find(x=>x.customer_id===c[1]); return {care_id:c[0],customer_id:c[1],branch_id:cu.branch_id,manager_staff_id:c[2],activity_type:c[3],frequency:c[4],planned_date:c[5],status:c[6],note:''};});
+    const receivables=[
+      ['CN-01','KH-01','DA-01','NS-02','T05/2026',480000000,480000000,'2026-05-25'],
+      ['CN-02','KH-01','DA-01','NS-02','T06/2026',520000000,0,'2026-06-20'],
+      ['CN-03','KH-02','DA-03','NS-02','T06/2026',310000000,150000000,'2026-06-10'],
+      ['CN-04','KH-03','DA-04','NS-06','T06/2026',275000000,0,'2026-06-24'],
+      ['CN-05','KH-04','DA-05','NS-06','T05/2026',190000000,0,'2026-05-20'],
+      ['CN-06','KH-06','DA-06','NS-09','T06/2026',640000000,200000000,'2026-04-15'],
+      ['CN-07','KH-07','DA-07','NS-09','T06/2026',420000000,0,'2026-07-05'],
+      ['CN-08','KH-09','DA-08','NS-12','T06/2026',360000000,360000000,'2026-06-22'],
+      ['CN-09','KH-05',null,'NS-02','T06/2026',145000000,0,'2026-06-01'],
+      ['CN-10','KH-08',null,'NS-09','T06/2026',98000000,50000000,'2026-06-18']
+    ].map(r=>{const cu=customers.find(x=>x.customer_id===r[1]); return {receivable_id:r[0],customer_id:r[1],project_id:r[2],branch_id:cu.branch_id,manager_staff_id:r[3],period:r[4],amount:r[5],collected_amount:r[6],due_date:r[7],note:''};});
+    const users=[
+      ['admin@labor.vn',true,'ADMIN',null,null,'Quản trị hệ thống'],
+      ['bod@labor.vn',true,'BOD',null,null,'Ban lãnh đạo'],
+      ['hung.tran@labor.vn',true,'BM','NS-01','BR-01','Trần Quốc Hùng'],
+      ['lan.nguyen@labor.vn',true,'OM','NS-02','BR-01','Nguyễn Thị Lan'],
+      ['nam.le@labor.vn',true,'SPV','NS-03','BR-01','Lê Văn Nam'],
+      ['hoa.pham@labor.vn',true,'SPV','NS-04','BR-01','Phạm Thị Hoa'],
+      ['khoa.vu@labor.vn',true,'OM','NS-06','BR-01','Vũ Đình Khoa'],
+      ['ha.ngo@labor.vn',true,'OM','NS-09','BR-02','Ngô Thu Hà'],
+      ['son.bui@labor.vn',true,'BM','NS-08','BR-02','Bùi Thanh Sơn'],
+      ['phuc.mai@labor.vn',false,'SPV','NS-13','BR-03','Mai Văn Phúc']
+    ].map(u=>({user_email:u[0],active:u[1],role:u[2],staff_id:u[3],branch_id:u[4],display_name:u[5],locale:'vi'}));
+    const categories=[
+      ['customer_type','key','Khách trọng điểm','重点客户'],['customer_type','regular','Khách thường','普通客户'],
+      ['method','direct','Trực tiếp','直接'],['method','partner','Cộng tác viên','合作'],['method','internal','Nội bộ','内部'],
+      ['service_type','outsourcing','Cung ứng lao động','劳务外包'],['service_type','recruitment','Tuyển dụng','招聘'],
+      ['project_status','active','Đang chạy','进行中'],['project_status','paused','Tạm dừng','暂停'],['project_status','ended','Kết thúc','结束'],
+      ['care_status','pending','Chờ xử lý','待处理'],['care_status','in_progress','Đang làm','进行中'],['care_status','done','Hoàn thành','完成'],['care_status','overdue','Quá hạn','逾期'],
+      ['collection_stage','remind_1','Nhắc lần 1','提醒1'],['collection_stage','official_letter','Gửi công văn','正式函'],['collection_stage','legal','Chuyển pháp lý','法务'],
+      ['price_unit','person','/người','/人'],['price_unit','hour','/giờ','/小时']
+    ].map((c,i)=>({category_group:c[0],enum_code:c[1],label_vi:c[2],label_zh:c[3],sort_order:i+1,active:true}));
+    const policies=[
+      ['CS-01','KH-01','WS-01','open',880000,'person','Nam/nữ 18-35, đọc viết tốt',5800000,900000,true],
+      ['CS-02','KH-01','WS-03','open',920000,'person','Nam 18-32, mắt tốt',6000000,950000,true],
+      ['CS-03','KH-02','WS-04','open',850000,'person','Nữ 18-30, tỉ mỉ',5500000,800000,true],
+      ['CS-04','KH-03','WS-05','paused',800000,'person','Nam/nữ 18-35',5400000,700000,false],
+      ['CS-05','KH-06','WS-07','open',900000,'person','Nam 18-40',5900000,1000000,true],
+      ['CS-06','KH-07','WS-08','open',45000,'hour','Theo ca, đứng máy',0,0,true]
+    ].map(p=>({policy_id:p[0],customer_id:p[1],workshop_id:p[2],recruiting_status:p[3],unit_price:p[4],price_unit:p[5],requirement_note:p[6],base_salary:p[7],allowance:p[8],has_dormitory:p[9]}));
+    return {branches,staff,customers,projects,workshops,projectStaff,demands,reports,careTasks,receivables,users,categories,policies};
+  }
+
+  // ---------------- LOOKUPS ----------------
+  staffById(id){return this.db.staff.find(s=>s.staff_id===id);}
+  staffName(id){const s=this.staffById(id); return s?s.full_name:(id||'—');}
+  custById(id){return this.db.customers.find(c=>c.customer_id===id)||{};}
+  custName(id){const c=this.custById(id); if(!c.customer_id)return id||'—'; return this.props.bilingual&&c.customer_name_zh?(c.customer_name+' · '+c.customer_name_zh):c.customer_name;}
+  projById(id){return this.db.projects.find(p=>p.project_id===id)||{};}
+  projName(id){const p=this.projById(id); return p.project_name||id||'—';}
+  wsById(id){return this.db.workshops.find(w=>w.workshop_id===id)||{};}
+  wsName(id){const w=this.wsById(id); return w.workshop_name||(id||'—');}
+  branchById(id){return this.db.branches.find(b=>b.branch_id===id)||{};}
+  branchName(id){const b=this.branchById(id); return b.branch_name||id||'—';}
+  methodLabel(m){return {direct:'Trực tiếp',partner:'CTV',internal:'Nội bộ'}[m]||m;}
+
+  // ---------------- FORMAT ----------------
+  fmtInt(n){return (n==null||n==='')?'—':Number(n).toLocaleString('vi-VN');}
+  fmtVnd(n){return Number(n||0).toLocaleString('vi-VN')+' ₫';}
+  fmtShort(n){n=Number(n||0); if(Math.abs(n)>=1e9) return (n/1e9).toLocaleString('vi-VN',{maximumFractionDigits:2})+' tỷ'; if(Math.abs(n)>=1e6) return (n/1e6).toLocaleString('vi-VN',{maximumFractionDigits:0})+' tr'; return n.toLocaleString('vi-VN');}
+  pct(x){return (x==null||x==='')?'—':Math.round(x*100)+'%';}
+  weekNum(w){return parseInt(String(w).split('-W')[1],10);}
+  weekLabelFull(w){return 'Tuần '+this.weekNum(w)+' · 2026';}
+  weekShort(w){return 'W'+this.weekNum(w)+' 2026';}
+  todayDate(){return new Date(this.today+'T00:00:00');}
+  parseD(s){return new Date(String(s).slice(0,10)+'T00:00:00');}
+  fmtDate(s){const d=this.parseD(s); return ('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2);}
+  fmtDateFull(s){const d=this.parseD(s); return ('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)+'/'+d.getFullYear();}
+  initials(name){return String(name||'?').trim().split(/\s+/).slice(-2).map(x=>x[0]).join('').toUpperCase();}
+
+  fillTone(f){return f==null?'gray':f>=1?'green':f>=0.7?'blue':f>=0.5?'amber':'red';}
+  fillSolid(f){return this.C[this.fillTone(f)].sol;}
+  fillLabel(f){return f==null?'Chưa có KPI':f>=1?'Đạt mục tiêu':f>=0.7?'Gần đạt':'Dưới mục tiêu';}
+  agingStage(od){if(od<=0)return 'not_due'; if(od<=7)return 'remind_1'; if(od<=15)return 'remind_2'; if(od<=30)return 'official_letter'; if(od<=60)return 'negotiation'; return 'legal';}
+  agingMeta(stage){return {not_due:['Trong hạn','gray'],remind_1:['Nhắc 1','amber'],remind_2:['Nhắc 2','amber'],official_letter:['Công văn','orange'],negotiation:['Đàm phán','orange'],legal:['Pháp lý','red'],paid:['Đã thu','green']}[stage]||['—','gray'];}
+  careStatusMeta(s){return {pending:['Chờ','gray'],in_progress:['Đang làm','blue'],done:['Hoàn thành','green'],overdue:['Quá hạn','red']}[s]||['—','gray'];}
+  collMeta(s){return {unpaid:['Chưa thu','gray'],partial:['Thu một phần','amber'],paid:['Đã thu đủ','green']}[s]||['—','gray'];}
+
+  // ---------------- SCOPE / RBAC ----------------
+  currentUser(){
+    const r=this.state.role;
+    if(r==='ADMIN') return {role:'ADMIN',name:'Quản trị hệ thống',email:'admin@labor.vn',staff_id:null,branch_id:null};
+    if(r==='BOD') return {role:'BOD',name:'Ban lãnh đạo',email:'bod@labor.vn',staff_id:null,branch_id:null};
+    const sid={BM:'NS-01',OM:'NS-02',SPV:'NS-03'}[r];
+    const st=this.staffById(sid);
+    return {role:r,staff_id:st.staff_id,branch_id:st.branch_id,name:st.full_name,email:st.email};
+  }
+  isStaffUnder(sid,mgr){let s=this.staffById(sid),g=0; while(s&&g++<6){if(String(s.manager_staff_id)===String(mgr))return true; s=this.staffById(s.manager_staff_id);} return false;}
+  scopeRows(rows){
+    const u=this.currentUser();
+    let out=rows;
+    if(u.role==='BM') out=rows.filter(r=>String(r.branch_id)===String(u.branch_id));
+    else if(u.role==='OM') out=rows.filter(r=>String(r.branch_id)===String(u.branch_id)&&(String(r.manager_staff_id)===String(u.staff_id)||String(r.specialist_staff_id)===String(u.staff_id)||(r.specialist_staff_id&&this.isStaffUnder(r.specialist_staff_id,u.staff_id))));
+    else if(u.role==='SPV') out=rows.filter(r=>String(r.specialist_staff_id)===String(u.staff_id));
+    if((u.role==='ADMIN'||u.role==='BOD')&&this.state.branchFilter!=='all') out=out.filter(r=>String(r.branch_id)===String(this.state.branchFilter));
+    return out;
+  }
+  scopeReadList(rows){ // for master/customer read scope: branch only (SPV sees branch read)
+    const u=this.currentUser();
+    if(u.role==='ADMIN'||u.role==='BOD'){ return this.state.branchFilter!=='all'?rows.filter(r=>String(r.branch_id)===String(this.state.branchFilter)):rows; }
+    return rows.filter(r=>String(r.branch_id)===String(u.branch_id));
+  }
+
+  // ---------------- COMPUTE ----------------
+  emptyKpi(week,p,s){return {week,project_id:p,specialist_staff_id:s,branch_id:null,manager_staff_id:null,assigned_kpi:0,customer_demand:0,registered:0,interviewed:0,passed_interview:0,started_work:0,_d:false,_r:false};}
+  computeKpi(week){
+    const demands=this.db.demands.filter(d=>d.week===week);
+    const reports=this.db.reports.filter(r=>r.week===week);
+    const map={}; const key=(p,s)=>p+'|'+s;
+    demands.forEach(d=>{const k=key(d.project_id,d.specialist_staff_id); const m=map[k]||(map[k]=this.emptyKpi(week,d.project_id,d.specialist_staff_id)); m.branch_id=d.branch_id; m.manager_staff_id=d.manager_staff_id; m.assigned_kpi+=+d.assigned_kpi||0; m.customer_demand+=+d.customer_demand||0; m._d=true;});
+    reports.forEach(r=>{const k=key(r.project_id,r.specialist_staff_id); const m=map[k]||(map[k]=this.emptyKpi(week,r.project_id,r.specialist_staff_id)); m.branch_id=m.branch_id||r.branch_id; if(!m.manager_staff_id)m.manager_staff_id=this.projById(r.project_id).manager_staff_id; m.registered+=+r.registered||0; m.interviewed+=+r.interviewed||0; m.passed_interview+=+r.passed_interview||0; m.started_work+=+r.started_work||0; m._r=true;});
+    return Object.keys(map).map(k=>{const m=map[k]; m.fill_rate=m.assigned_kpi?m.started_work/m.assigned_kpi:null; m.conversion_rate=m.registered?m.started_work/m.registered:0; m.pass_interview_rate=m.interviewed?m.passed_interview/m.interviewed:0; m.has_staff_mismatch=!(m._d&&m._r); return m;});
+  }
+  enrichReceivable(r){const od=Math.max(0,Math.floor((this.todayDate()-this.parseD(r.due_date))/86400000)); const remaining=r.amount-r.collected_amount; const status=r.collected_amount<=0?'unpaid':(r.collected_amount>=r.amount?'paid':'partial'); const stage=status==='paid'?'paid':(r.stageOverride||this.agingStage(od)); return Object.assign({},r,{overdue_days:od,remaining_amount:remaining,collection_status:status,aging_stage:stage,overridden:!!r.stageOverride});}
+  enrichCare(c){const pd=this.parseD(c.planned_date),td=this.todayDate(); let st=c.status; const isToday=pd.getTime()===td.getTime(); if(st!=='done'&&pd<td)st='overdue'; return Object.assign({},c,{dstatus:st,isToday,isFuture:pd>td});}
+  pendingReportsToday(){
+    const list=this.db.projectStaff.filter(ps=>ps.active!==false).map(ps=>{const p=this.projById(ps.project_id); if(!p.project_id||p.status!=='active')return null; return {project_id:ps.project_id,specialist_staff_id:ps.staff_id,branch_id:p.branch_id,manager_staff_id:p.manager_staff_id};}).filter(Boolean);
+    return this.scopeRows(list).filter(a=>!this.db.reports.some(r=>r.date===this.today&&r.project_id===a.project_id&&r.specialist_staff_id===a.specialist_staff_id));
+  }
+
+  // ---------------- HANDLERS ----------------
+  setNav(k){this.setState({nav:k,roleMenu:false,weekMenu:false,branchMenu:false,modal:null,selectedCustomer:null});}
+  setRole(r){this.setState({role:r,roleMenu:false,branchFilter:'all',selectedCustomer:null,modal:null});}
+  toggleRoleMenu(){this.setState(s=>({roleMenu:!s.roleMenu,weekMenu:false,branchMenu:false}));}
+  setWeek(w){this.setState({week:w,weekMenu:false});}
+  toggleWeekMenu(){this.setState(s=>({weekMenu:!s.weekMenu,roleMenu:false,branchMenu:false}));}
+  setBranch(b){this.setState({branchFilter:b,branchMenu:false,selectedCustomer:null});}
+  toggleBranchMenu(){this.setState(s=>({branchMenu:!s.branchMenu,roleMenu:false,weekMenu:false}));}
+  openModal(m){this.setState({modal:m,roleMenu:false,weekMenu:false,branchMenu:false});}
+  closeModal(){this.setState({modal:null});}
+  stop(e){if(e&&e.stopPropagation)e.stopPropagation();}
+  showToast(text,color){this.setState({toast:{text,color:color||this.C.green.sol}}); clearTimeout(this._tt); this._tt=setTimeout(()=>this.setState({toast:null}),2600);}
+
+  // ---------------- RENDER ----------------
+  renderVals(){
+    return Object.assign({},
+      this.shellVals(),
+      this.dashboardVals(),
+      this.dailyVals(),
+      this.kpiVals(),
+      this.demandVals(),
+      this.customerVals(),
+      this.careVals(),
+      this.receivableVals(),
+      this.masterVals(),
+      this.settingsVals(),
+      this.modalVals()
+    );
+  }
+
+  shellVals(){
+    const u=this.currentUser(), role=this.state.role, nav=this.state.nav, C=this.C;
+    const groups={dashboard:'Tổng quan',daily:'Vận hành',kpi:'Vận hành',demand:'Vận hành',customers:'Khách hàng',care:'Khách hàng',receivables:'Khách hàng',master:'Hệ thống',settings:'Hệ thống'};
+    let lastG=null;
+    const careCount=this.scopeRows(this.db.careTasks.map(c=>this.enrichCare(c))).filter(c=>c.dstatus==='overdue').length;
+    const dailyCount=this.pendingReportsToday().length;
+    const badgeFor=(k)=>k==='care'?(careCount||''):(k==='daily'?(dailyCount||''):'');
+    const navItems=this.NAV.filter(n=>n.roles.includes(role)).map(n=>{const active=nav===n.key; let gl=''; if(groups[n.key]!==lastG){gl=groups[n.key]; lastG=groups[n.key];} return {key:n.key,label:n.label,icon:n.icon,active,groupLabel:gl,badge:badgeFor(n.key),bg:active?'color-mix(in srgb,var(--ac) 16%,transparent)':'transparent',fg:active?'#ffffff':'#cbd5e1',onSelect:()=>this.setNav(n.key)};});
+    const roleDefs=[['ADMIN','Quản trị','Toàn hệ thống','violet'],['BOD','Ban lãnh đạo','Xem toàn công ty','blue'],['BM','Giám đốc chi nhánh','Phạm vi chi nhánh','teal'],['OM','Quản lý vận hành','Dự án phụ trách','green'],['SPV','Chuyên viên','Dữ liệu cá nhân','amber']];
+    const roleList=roleDefs.map(r=>({key:r[0],label:r[1],desc:r[2],code:r[0],active:role===r[0],bg:role===r[0]?'#f1f5f9':'none',dotBg:C[r[3]].bg,dotFg:C[r[3]].fg,onSelect:()=>this.setRole(r[0])}));
+    const roleLabel=roleDefs.find(r=>r[0]===role)[1];
+    const weeks=['2026-W24','2026-W25','2026-W26','2026-W27'];
+    const weekList=weeks.map(w=>({key:w,label:this.weekLabelFull(w),sub:this.weekRange(w),active:this.state.week===w,weight:this.state.week===w?'700':'500',bg:this.state.week===w?'#f1f5f9':'none',onSelect:()=>this.setWeek(w)}));
+    const branchSelectable=(role==='ADMIN'||role==='BOD');
+    const branchList=[{key:'all',label:'Tất cả chi nhánh'}].concat(this.db.branches.map(b=>({key:b.branch_id,label:b.branch_name}))).map(b=>({key:b.key,label:b.label,weight:this.state.branchFilter===b.key?'700':'500',bg:this.state.branchFilter===b.key?'#f1f5f9':'none',onSelect:()=>this.setBranch(b.key)}));
+    const branchLabel=branchSelectable?(this.state.branchFilter==='all'?'Tất cả chi nhánh':this.branchName(this.state.branchFilter)):this.branchName(u.branch_id);
+    const titles={dashboard:'Tổng quan',daily:'Báo cáo ngày',kpi:'KPI tuần',demand:'Nhu cầu tuần',customers:'Khách hàng',care:'Chăm sóc khách hàng',receivables:'Công nợ phải thu',master:'Dữ liệu nền',settings:'Cấu hình hệ thống'};
+    const subs={dashboard:'Tổng hợp theo vai trò',daily:'Phễu tuyển dụng hằng ngày',kpi:'Roll-up tự động · read-only',demand:'Nhập KPI giao theo tuần',customers:'Hồ sơ khách hàng FDI',care:'Lịch chăm sóc & nhật ký',receivables:'Tuổi nợ & thu hồi',master:'Dự án · Xưởng · Nhân sự · Chính sách',settings:'Người dùng & danh mục'};
+    const pageSub=this.weekLabelFull(this.state.week)+' · '+branchLabel;
+    const mNav=[['dashboard','Trang chủ',this.ICON.HOME],['daily','Báo cáo',this.ICON.DOC],['kpi','KPI',this.ICON.BARS],['customers','Khách',this.ICON.USERS]];
+    const mobileNav=mNav.map(m=>({key:m[0],label:m[1],icon:m[2],color:nav===m[0]?'var(--ac)':'#94a3b8',weight:nav===m[0]?'600':'500',badge:badgeFor(m[0]),onSelect:()=>this.setNav(m[0])})).concat([{key:'more',label:'Thêm',icon:this.ICON.MORE,color:'#94a3b8',weight:'500',badge:'',onSelect:()=>this.openModal({kind:'nav',width:'420px'})}]);
+    return {navItems,roleList,roleLabel,roleCode:role,roleMenuOpen:this.state.roleMenu,
+      weekList,weekLabel:this.weekLabelFull(this.state.week),weekMenuOpen:this.state.weekMenu,weekShort:this.weekShort(this.state.week),
+      branchSelectable,branchFixed:branchSelectable?'':branchLabel,branchList,branchLabel,branchMenuOpen:this.state.branchMenu,
+      user:{name:u.name,email:u.email,initials:this.initials(u.name),roleLabel},
+      pageTitle:titles[nav],pageSub,
+      mobileNav,
+      isDashboard:nav==='dashboard',isDaily:nav==='daily',isKpi:nav==='kpi',isDemand:nav==='demand',isCustomers:nav==='customers',isCare:nav==='care',isReceivables:nav==='receivables',isMaster:nav==='master',isSettings:nav==='settings',
+      modal:this.state.modal,toast:this.state.toast,
+      toggleRoleMenu:()=>this.toggleRoleMenu(),toggleWeekMenu:()=>this.toggleWeekMenu(),toggleBranchMenu:()=>this.toggleBranchMenu(),
+      closeModal:()=>this.closeModal(),stop:(e)=>this.stop(e),setRoot:this.setRoot,
+      goKpi:()=>this.setNav('kpi'),goReceivables:()=>this.setNav('receivables')};
+  }
+  weekRange(w){const n=this.weekNum(w); const ranges={24:'08–14/06',25:'15–21/06',26:'22–28/06',27:'29/06–05/07'}; return ranges[n]||'';}
+
+  dashboardVals(){
+    const u=this.currentUser(), role=this.state.role, wk=this.state.week, C=this.C, I=this.ICON;
+    const st=(label,value,sub,tone,icon)=>({label,value:String(value),sub,subColor:(C[tone]||C.gray).fg,iconBg:(C[tone]||C.gray).bg,iconFg:(C[tone]||C.gray).sol,icon});
+    const allKpi=this.computeKpi(wk);
+    const kpi=this.scopeRows(allKpi);
+    const sum=(a,k)=>a.reduce((s,r)=>s+(+r[k]||0),0);
+    const reg=sum(kpi,'registered'),intv=sum(kpi,'interviewed'),pass=sum(kpi,'passed_interview'),start=sum(kpi,'started_work'),kpis=sum(kpi,'assigned_kpi');
+    const fill=kpis?start/kpis:null,conv=reg?start/reg:0,prate=intv?pass/intv:0;
+    const mismatch=kpi.filter(k=>k.has_staff_mismatch).length;
+    const recv=this.scopeRows(this.db.receivables.map(r=>this.enrichReceivable(r)));
+    const unpaid=recv.filter(r=>r.collection_status!=='paid');
+    const totalRem=sum(unpaid,'remaining_amount');
+    const overdue=unpaid.filter(r=>r.overdue_days>0);
+    const overdueRem=overdue.reduce((s,r)=>s+r.remaining_amount,0);
+    const care=this.scopeRows(this.db.careTasks.map(c=>this.enrichCare(c)));
+    const careOverdue=care.filter(c=>c.dstatus==='overdue').length;
+    const careToday=care.filter(c=>c.isToday&&c.dstatus!=='done').length;
+    const pending=this.pendingReportsToday();
+    const empty=kpi.length===0&&recv.length===0&&pending.length===0;
+    let dashStats=[];
+    if(role==='ADMIN'||role==='BOD'||role==='BM'){
+      dashStats=[
+        st('Đi làm tuần này',this.fmtInt(start),'Mục tiêu '+this.fmtInt(kpis),'blue',I.TREND),
+        st('Fill rate',this.pct(fill),this.fillLabel(fill),this.fillTone(fill),I.BARS),
+        st('Công nợ còn lại',this.fmtShort(totalRem),unpaid.length+' hồ sơ','gray',I.CARD),
+        st('Công nợ quá hạn',this.fmtShort(overdueRem),overdue.length+' hồ sơ',overdue.length?'red':'green',I.ALERT),
+        st('Chăm sóc quá hạn',careOverdue,careOverdue?'Cần xử lý':'Đã ổn',careOverdue?'amber':'green',I.PHONE),
+        st('Dòng cần rà soát',mismatch,'Lệch CV / KPI',mismatch?'amber':'green',I.SEARCH)
+      ];
+    } else if(role==='OM'){
+      const myProjects=this.db.projects.filter(p=>p.manager_staff_id===u.staff_id);
+      const mySpv=this.db.staff.filter(s=>this.isStaffUnder(s.staff_id,u.staff_id));
+      dashStats=[
+        st('Dự án phụ trách',myProjects.length,myProjects.filter(p=>p.status==='active').length+' đang chạy','blue',I.LAYERS),
+        st('Chuyên viên',mySpv.length,'Dưới quyền','gray',I.USERS),
+        st('Báo cáo thiếu hôm nay',pending.length,pending.length?'Cần nhắc nhập':'Đã đủ',pending.length?'amber':'green',I.DOC),
+        st('Fill rate đội',this.pct(fill),this.fillLabel(fill),this.fillTone(fill),I.BARS),
+        st('Công nợ phụ trách',this.fmtShort(totalRem),overdue.length+' quá hạn',overdue.length?'red':'gray',I.CARD),
+        st('Chăm sóc hôm nay',careToday+careOverdue,careOverdue+' quá hạn',careOverdue?'amber':'green',I.PHONE)
+      ];
+    } else {
+      dashStats=[
+        st('Báo cáo hôm nay',pending.length,pending.length?'Chưa nhập':'Đã nhập đủ',pending.length?'red':'green',I.DOC),
+        st('Fill rate của tôi',this.pct(fill),this.fillLabel(fill),this.fillTone(fill),I.BARS),
+        st('Đi làm tuần',this.fmtInt(start),'KPI giao '+this.fmtInt(kpis),'blue',I.TREND),
+        st('Dòng lệch',mismatch,mismatch?'Cần xem lại':'Không có',mismatch?'amber':'green',I.ALERT)
+      ];
+    }
+    const mx=Math.max(reg,1);
+    const dashFunnel={bars:[
+      {label:'Đăng ký',val:this.fmtInt(reg),pct:Math.round(reg/mx*100)+'%',color:'color-mix(in srgb,var(--ac) 32%,#fff)'},
+      {label:'Phỏng vấn',val:this.fmtInt(intv),pct:Math.round(intv/mx*100)+'%',color:'color-mix(in srgb,var(--ac) 54%,#fff)'},
+      {label:'Đỗ PV',val:this.fmtInt(pass),pct:Math.round(pass/mx*100)+'%',color:'color-mix(in srgb,var(--ac) 78%,#fff)'},
+      {label:'Đi làm',val:this.fmtInt(start),pct:Math.round(start/mx*100)+'%',color:'var(--ac)'}
+    ],fillText:this.pct(fill),convText:this.pct(conv),passText:this.pct(prate)};
+    const byBranch={};
+    kpi.forEach(k=>{const b=k.branch_id||'?'; const o=byBranch[b]||(byBranch[b]={kpi:0,start:0}); o.kpi+=+k.assigned_kpi||0; o.start+=+k.started_work||0;});
+    const dashBranchFill=Object.keys(byBranch).map(b=>{const o=byBranch[b]; const f=o.kpi?o.start/o.kpi:0; return {name:this.branchName(b),pctText:this.pct(o.kpi?f:null),barPct:Math.min(100,Math.round(f*100))+'%',color:this.fillSolid(f)};}).sort((a,b)=>parseFloat(b.barPct)-parseFloat(a.barPct));
+    const buckets=[['not_due','Trong hạn','gray'],['remind_1','Nhắc 1','amber'],['remind_2','Nhắc 2','amber'],['official_letter','Công văn','orange'],['negotiation','Đàm phán','orange'],['legal','Pháp lý','red']];
+    const agTotal=unpaid.reduce((s,r)=>s+r.remaining_amount,0)||1;
+    const dashAgingBuckets=buckets.map(b=>{const rows=unpaid.filter(r=>r.aging_stage===b[0]); const amt=rows.reduce((s,r)=>s+r.remaining_amount,0); return {label:b[1],amount:this.fmtShort(amt),count:rows.length,color:C[b[2]].sol,width:(amt/agTotal*100)+'%',raw:amt};}).filter(b=>b.raw>0);
+    const dashAging={total:this.fmtShort(unpaid.reduce((s,r)=>s+r.remaining_amount,0)),buckets:dashAgingBuckets};
+    let dashAction=[];
+    if(careOverdue) dashAction.push({title:careOverdue+' lịch chăm sóc quá hạn',sub:'Khách cần liên hệ ngay',dot:C.red.sol,onClick:()=>this.setState({nav:'care',careTab:'overdue',modal:null})});
+    if(pending.length) dashAction.push({title:pending.length+' báo cáo chưa nhập hôm nay',sub:'Phễu tuyển dụng còn trống',dot:C.amber.sol,onClick:()=>this.setNav('daily')});
+    if(mismatch) dashAction.push({title:mismatch+' dòng KPI lệch CV',sub:'Thiếu nhu cầu hoặc thiếu báo cáo',dot:C.amber.sol,onClick:()=>this.setNav('kpi')});
+    if(overdue.length) dashAction.push({title:overdue.length+' hồ sơ công nợ quá hạn',sub:this.fmtShort(overdueRem)+' chưa thu',dot:C.red.sol,onClick:()=>this.setNav('receivables')});
+    const noMgr=this.scopeReadList(this.db.customers).filter(c=>!c.manager_staff_id).length;
+    if(noMgr) dashAction.push({title:noMgr+' khách thiếu quản lý',sub:'Ảnh hưởng chất lượng dữ liệu',dot:C.gray.sol,onClick:()=>this.setNav('customers')});
+    const dashKpiLow=kpi.filter(k=>k.assigned_kpi>0).map(k=>({project:this.projName(k.project_id),specialist:this.staffName(k.specialist_staff_id),fill:k.fill_rate,fillText:this.pct(k.fill_rate),barPct:Math.min(100,Math.round((k.fill_rate||0)*100))+'%',color:this.fillSolid(k.fill_rate),onClick:()=>this.setNav('kpi')})).sort((a,b)=>(a.fill||0)-(b.fill||0)).slice(0,6);
+    return {dashStats,dashFunnel,dashBranchFill,dashAging,dashAction,dashKpiLow,dashEmpty:empty,dashHasData:!empty,showBranchPanel:role!=='SPV'&&dashBranchFill.length>1,showFinance:role!=='SPV'&&dashAgingBuckets.length>0,dashActionEmpty:dashAction.length===0};
+  }
+
+  isoWeek(dateStr){const d=this.parseD(dateStr);const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=(t.getUTCDay()+6)%7;t.setUTCDate(t.getUTCDate()-day+3);const ft=new Date(Date.UTC(t.getUTCFullYear(),0,4));const fd=(ft.getUTCDay()+6)%7;ft.setUTCDate(ft.getUTCDate()-fd+3);const wn=1+Math.round((t-ft)/(7*86400000));return t.getUTCFullYear()+'-W'+('0'+wn).slice(-2);}
+  dailyProjectOptions(){const ids=new Set();this.scopeRows(this.db.reports).forEach(r=>ids.add(r.project_id));this.scopeRows(this.db.demands).forEach(d=>ids.add(d.project_id));const opts=[...ids].map(id=>({value:id,label:this.projName(id)})).sort((a,b)=>a.label.localeCompare(b.label));return [{value:'all',label:'Tất cả dự án'}].concat(opts);}
+  specialistOptions(pid){let ids=this.db.projectStaff.filter(ps=>ps.project_id===pid).map(ps=>ps.staff_id);if(!ids.length)ids=this.db.staff.filter(s=>s.role_business!=='BM').map(s=>s.staff_id);return ids.map(id=>({value:id,label:this.staffName(id)}));}
+  openReportForm(arg){const u=this.currentUser();let draft;if(arg&&arg.report_id){draft=Object.assign({},arg);}else{draft={report_id:null,date:this.today,project_id:(arg&&arg.project_id)||'',workshop_id:'',method:'direct',specialist_staff_id:(arg&&arg.specialist_staff_id)||(u.role==='SPV'?u.staff_id:''),registered:'',interviewed:'',passed_interview:'',started_work:'',note:''};if(arg&&arg.project_id){const w=this.db.workshops.find(x=>x.project_id===arg.project_id);draft.workshop_id=w?w.workshop_id:'';}}this.setState({reportDraft:draft,modal:{kind:'report',width:'580px'}});}
+  updateDraft(field,value){this.setState(s=>({reportDraft:Object.assign({},s.reportDraft,{[field]:value})}));}
+  validateDraft(d){const errors=[],warnings=[];const reg=+d.registered||0,intv=+d.interviewed||0,pass=+d.passed_interview||0,start=+d.started_work||0;if(!d.project_id)errors.push('Vui lòng chọn dự án.');if(!d.specialist_staff_id)errors.push('Vui lòng chọn chuyên viên.');if(reg<0||intv<0||pass<0||start<0)errors.push('Số liệu phễu không được âm.');if(reg<intv)errors.push('Đăng ký không được nhỏ hơn Phỏng vấn.');if(intv<pass)errors.push('Phỏng vấn không được nhỏ hơn Đỗ PV.');if(start>pass)warnings.push('Đi làm lớn hơn Đỗ PV — hệ thống vẫn lưu nhưng cần rà soát.');return {errors,warnings,ok:errors.length===0};}
+  saveReport(){const d=this.state.reportDraft;const v=this.validateDraft(d);if(!v.ok){this.showToast(v.errors[0],this.C.red.sol);return;}const p=this.projById(d.project_id);const rec={report_id:d.report_id||('BC-'+('00000'+(this.db.reports.length+1)).slice(-5)),date:d.date,week:this.isoWeek(d.date),project_id:d.project_id,workshop_id:d.workshop_id,branch_id:p.branch_id,specialist_staff_id:d.specialist_staff_id,method:d.method,registered:+d.registered||0,interviewed:+d.interviewed||0,passed_interview:+d.passed_interview||0,started_work:+d.started_work||0,note:d.note,created_by:this.currentUser().email};if(d.report_id){const i=this.db.reports.findIndex(r=>r.report_id===d.report_id);if(i>=0)this.db.reports[i]=rec;}else this.db.reports.push(rec);this.setState({modal:null,reportDraft:null,week:rec.week});this.showToast(d.report_id?'Đã cập nhật báo cáo':'Đã lưu báo cáo · KPI tuần đã tính lại');}
+  dailyVals(){
+    const role=this.state.role,wk=this.state.week,dense=this.props.density==='compact';
+    let rows=this.scopeRows(this.db.reports.filter(r=>r.week===wk));
+    const fp=this.state.dailyProject,fm=this.state.dailyMethod,q=(this.state.dailyQ||'').toLowerCase();
+    let filtered=rows.filter(r=>(fp==='all'||r.project_id===fp)&&(fm==='all'||r.method===fm)&&(q===''||((this.projName(r.project_id)+this.staffName(r.specialist_staff_id)+this.wsName(r.workshop_id)).toLowerCase().includes(q))));
+    filtered=filtered.slice().sort((a,b)=>b.date.localeCompare(a.date)||a.project_id.localeCompare(b.project_id));
+    const dailyRows=filtered.map(r=>{const warn=(+r.started_work>+r.passed_interview);return {id:r.report_id,date:this.fmtDate(r.date),project:this.projName(r.project_id),workshop:this.wsName(r.workshop_id),specialist:this.staffName(r.specialist_staff_id),method:this.methodLabel(r.method),mBg:r.method==='direct'?this.C.blue.bg:r.method==='partner'?this.C.violet.bg:this.C.gray.bg,mFg:r.method==='direct'?this.C.blue.fg:r.method==='partner'?this.C.violet.fg:this.C.gray.fg,reg:this.fmtInt(r.registered),intv:this.fmtInt(r.interviewed),pass:this.fmtInt(r.passed_interview),start:this.fmtInt(r.started_work),warn,py:dense?'7px':'10px',onEdit:()=>this.openReportForm(r)};});
+    const sum=(k)=>filtered.reduce((s,r)=>s+(+r[k]||0),0);
+    const dailySummary=[{label:'Báo cáo',value:this.fmtInt(filtered.length),accent:'#0f172a'},{label:'Đăng ký',value:this.fmtInt(sum('registered')),accent:'#0f172a'},{label:'Phỏng vấn',value:this.fmtInt(sum('interviewed')),accent:'#0f172a'},{label:'Đỗ PV',value:this.fmtInt(sum('passed_interview')),accent:'#0f172a'},{label:'Đi làm',value:this.fmtInt(sum('started_work')),accent:'var(--ac)'}];
+    const pend=this.pendingReportsToday();
+    const dailyPending=pend.slice(0,6).map(a=>({project:this.projName(a.project_id),specialist:this.staffName(a.specialist_staff_id),onFill:()=>this.openReportForm({project_id:a.project_id,specialist_staff_id:a.specialist_staff_id})}));
+    return {dailyRows,dailySummary,dailyEmpty:dailyRows.length===0,dailyHasRows:dailyRows.length>0,dailyProjectOpts:this.dailyProjectOptions(),dailyMethodOpts:[{value:'all',label:'Tất cả phương thức'},{value:'direct',label:'Trực tiếp'},{value:'partner',label:'Cộng tác viên'},{value:'internal',label:'Nội bộ'}],dailyProject:this.state.dailyProject,dailyMethod:this.state.dailyMethod,dailyQ:this.state.dailyQ,dailyCanEdit:['ADMIN','OM','SPV'].includes(role),dailyPending,dailyHasPending:dailyPending.length>0,dailyPendingCount:pend.length,
+      onDailyProject:(e)=>this.setState({dailyProject:e.target.value}),onDailyMethod:(e)=>this.setState({dailyMethod:e.target.value}),onDailyQ:(e)=>this.setState({dailyQ:e.target.value}),onNewReport:()=>this.openReportForm(null)};
+  }
+  recomputeWeek(){const n=this.scopeRows(this.computeKpi(this.state.week)).length;this.showToast('Đã tính lại KPI '+this.weekLabelFull(this.state.week)+' · '+n+' dòng',this.C.blue.sol);}
+  kpiVals(){
+    const wk=this.state.week,role=this.state.role,dense=this.props.density==='compact',C=this.C;
+    const fp=this.state.kpiProject||'all',fs=this.state.kpiSpecialist||'all';
+    let kpi=this.scopeRows(this.computeKpi(wk));
+    const allSpv=[...new Set(kpi.map(k=>k.specialist_staff_id))];
+    if(this.state.kpiMismatch)kpi=kpi.filter(k=>k.has_staff_mismatch);
+    if(fp!=='all')kpi=kpi.filter(k=>k.project_id===fp);
+    if(fs!=='all')kpi=kpi.filter(k=>k.specialist_staff_id===fs);
+    const sort=this.state.kpiSort;
+    kpi=kpi.slice().sort((a,b)=>sort==='fill'?(b.fill_rate||0)-(a.fill_rate||0):sort==='conversion'?b.conversion_rate-a.conversion_rate:b.started_work-a.started_work);
+    const sum=(k)=>kpi.reduce((s,r)=>s+(+r[k]||0),0);
+    const reg=sum('registered'),intv=sum('interviewed'),pass=sum('passed_interview'),start=sum('started_work'),kpis=sum('assigned_kpi');
+    const fill=kpis?start/kpis:null,conv=reg?start/reg:0,prate=intv?pass/intv:0;
+    const card=(label,value,tone,sub)=>({label,value,valColor:(C[tone]||C.gray).sol,sub});
+    const kpiCards=[card('Fill rate',this.pct(fill),this.fillTone(fill),this.fmtInt(start)+' / '+this.fmtInt(kpis)+' KPI giao'),card('Chuyển đổi',this.pct(conv),'blue','Đi làm / Đăng ký'),card('Đậu phỏng vấn',this.pct(prate),'teal','Đỗ PV / Phỏng vấn'),card('Tổng đi làm',this.fmtInt(start),'gray',kpi.length+' dòng KPI')];
+    const kpiRows=kpi.map(k=>{const tone=this.fillTone(k.fill_rate);return {project:this.projName(k.project_id),specialist:this.staffName(k.specialist_staff_id),kpiv:this.fmtInt(k.assigned_kpi),reg:this.fmtInt(k.registered),intv:this.fmtInt(k.interviewed),pass:this.fmtInt(k.passed_interview),start:this.fmtInt(k.started_work),fillText:this.pct(k.fill_rate),fillBg:C[tone].bg,fillFg:C[tone].fg,conv:this.pct(k.conversion_rate),prate:this.pct(k.pass_interview_rate),mismatch:k.has_staff_mismatch,py:dense?'7px':'11px',onDrill:()=>this.setState({nav:'daily',dailyProject:k.project_id,dailyMethod:'all',dailyQ:'',modal:null})};});
+    const spvOpts=[{value:'all',label:'Tất cả chuyên viên'}].concat(allSpv.map(id=>({value:id,label:this.staffName(id)})));
+    return {kpiCards,kpiRows,kpiEmpty:kpiRows.length===0,kpiHasRows:kpiRows.length>0,kpiProjectOpts:this.dailyProjectOptions(),kpiProject:fp,kpiSpecialistOpts:spvOpts,kpiSpecialist:fs,kpiMismatch:this.state.kpiMismatch,kpiSwitchBg:this.state.kpiMismatch?'var(--ac)':'#cbd5e1',kpiKnobX:this.state.kpiMismatch?'18px':'2px',kpiSort:this.state.kpiSort,kpiCanRecompute:['ADMIN','BM'].includes(role),
+      onKpiProject:(e)=>this.setState({kpiProject:e.target.value}),onKpiSpecialist:(e)=>this.setState({kpiSpecialist:e.target.value}),onKpiSort:(e)=>this.setState({kpiSort:e.target.value}),toggleKpiMismatch:()=>this.setState(s=>({kpiMismatch:!s.kpiMismatch})),onRecompute:()=>this.recomputeWeek()};
+  }
+  updateDemand(k,field,value){this.setState(s=>{const e=Object.assign({},s.demandEdits);e[k]=Object.assign({},e[k],{[field]:value});return {demandEdits:e};});}
+  saveDemand(){const edits=this.state.demandEdits,keys=Object.keys(edits);if(!keys.length){this.showToast('Chưa có thay đổi để lưu',this.C.gray.sol);return;}let n=0;keys.forEach(k=>{const parts=k.split('|'),wk=parts[0],p=parts[1],s=parts[2],ed=edits[k];const ex=this.db.demands.find(d=>d.week===wk&&d.project_id===p&&d.specialist_staff_id===s);const cd=ed.customer_demand!==undefined?(+ed.customer_demand||0):(ex?ex.customer_demand:0);const ak=ed.assigned_kpi!==undefined?(+ed.assigned_kpi||0):(ex?ex.assigned_kpi:0);if(ex){ex.customer_demand=cd;ex.assigned_kpi=ak;}else{const pr=this.projById(p);this.db.demands.push({demand_id:'NC-'+('00000'+(this.db.demands.length+1)).slice(-5),week:wk,project_id:p,workshop_id:'',branch_id:pr.branch_id,manager_staff_id:pr.manager_staff_id,specialist_staff_id:s,customer_demand:cd,assigned_kpi:ak,created_by:this.currentUser().email});}n++;});this.setState({demandEdits:{}});this.showToast('Đã lưu '+n+' dòng nhu cầu · KPI tuần đã tính lại');}
+  demandVals(){
+    const wk=this.state.week,dp=this.state.demandProject||'all',role=this.state.role,ro=role==='SPV'||role==='BOD';
+    let pairs;
+    if(dp==='all')pairs=this.scopeRows(this.db.demands.filter(d=>d.week===wk)).map(d=>({project_id:d.project_id,specialist_staff_id:d.specialist_staff_id}));
+    else pairs=this.db.projectStaff.filter(ps=>ps.project_id===dp).map(ps=>({project_id:dp,specialist_staff_id:ps.staff_id}));
+    const seen=new Set();pairs=pairs.filter(p=>{const k=p.project_id+p.specialist_staff_id;if(seen.has(k))return false;seen.add(k);return true;});
+    const key=(p,s)=>wk+'|'+p+'|'+s;
+    let tcd=0,tak=0;
+    const demandRows=pairs.map(pr=>{const k=key(pr.project_id,pr.specialist_staff_id);const ex=this.db.demands.find(d=>d.week===wk&&d.project_id===pr.project_id&&d.specialist_staff_id===pr.specialist_staff_id);const ed=this.state.demandEdits[k]||{};const cd=ed.customer_demand!==undefined?ed.customer_demand:(ex?ex.customer_demand:'');const ak=ed.assigned_kpi!==undefined?ed.assigned_kpi:(ex?ex.assigned_kpi:'');tcd+=+cd||0;tak+=+ak||0;const warn=(+ak>0&&+ak>+cd);return {key:k,project:this.projName(pr.project_id),specialist:this.staffName(pr.specialist_staff_id),customer_demand:cd,assigned_kpi:ak,warn,akBorder:warn?'#f59e0b':'#e2e8f0',ro,onCd:(e)=>this.updateDemand(k,'customer_demand',e.target.value),onAk:(e)=>this.updateDemand(k,'assigned_kpi',e.target.value)};});
+    const dirty=Object.keys(this.state.demandEdits).length>0;
+    return {demandRows,demandEmpty:demandRows.length===0,demandHasRows:demandRows.length>0,demandProjectOpts:this.dailyProjectOptions(),demandProject:dp,demandReadonly:ro,demandDirty:dirty,demandSaveBg:dirty?'var(--ac)':'#cbd5e1',demandTotalCd:this.fmtInt(tcd),demandTotalAk:this.fmtInt(tak),demandHint:dp==='all'?'Đang xem nhu cầu đã nhập. Chọn 1 dự án để nhập theo lưới chuyên viên.':'Lưới theo chuyên viên của dự án. Nhập nhu cầu KH và KPI giao, rồi lưu hàng loạt.',
+      onDemandProject:(e)=>this.setState({demandProject:e.target.value,demandEdits:{}}),onSaveDemand:()=>this.saveDemand()};
+  }
+  openCustomer(id){this.setState({selectedCustomer:id,modal:null});}
+  customerVals(){
+    const C=this.C,sel=this.state.selectedCustomer;
+    if(sel){
+      const c=this.custById(sel);
+      const projects=this.db.projects.filter(p=>p.customer_id===sel);
+      const workshops=this.db.workshops.filter(w=>w.customer_id===sel);
+      const policies=this.db.policies.filter(p=>p.customer_id===sel);
+      const recv=this.db.receivables.filter(r=>r.customer_id===sel).map(r=>this.enrichReceivable(r));
+      const remaining=recv.filter(r=>r.collection_status!=='paid').reduce((s,r)=>s+r.remaining_amount,0);
+      const care=this.db.careTasks.filter(t=>t.customer_id===sel).map(t=>this.enrichCare(t)).sort((a,b)=>b.planned_date.localeCompare(a.planned_date));
+      const ps=(s)=>({active:'Đang chạy',paused:'Tạm dừng',ended:'Kết thúc'}[s]||s);
+      const pst=(s)=>s==='active'?'green':s==='paused'?'amber':'gray';
+      const tymeta=c.customer_type==='key'?['Trọng điểm','blue']:['Khách thường','gray'];
+      const stats=[{label:'Dự án',value:projects.length,sub:projects.filter(p=>p.status==='active').length+' đang chạy'},{label:'Xưởng',value:workshops.length,sub:'thực thể'},{label:'Công nợ còn lại',value:this.fmtShort(remaining),sub:recv.filter(r=>r.collection_status!=='paid').length+' hồ sơ',accent:remaining>0?C.amber.sol:C.green.sol},{label:'Chăm sóc',value:care.length?this.careStatusMeta(care[0].dstatus)[0]:'—',sub:care.length?this.fmtDateFull(care[0].planned_date):'Chưa có'}];
+      return {isCustomerDetail:true,isCustomerList:false,customerDetail:{
+        name:c.customer_name,zh:c.customer_name_zh,hasZh:!!c.customer_name_zh,typeLabel:tymeta[0],typeBg:C[tymeta[1]].bg,typeFg:C[tymeta[1]].fg,branch:this.branchName(c.branch_id),
+        manager:c.manager_staff_id?this.staffName(c.manager_staff_id):null,noManager:!c.manager_staff_id,stats,
+        projects:projects.map(p=>({name:p.project_name,statusLabel:ps(p.status),sBg:C[pst(p.status)].bg,sFg:C[pst(p.status)].fg,manager:this.staffName(p.manager_staff_id)})),
+        workshops:workshops.map(w=>({name:w.workshop_name,project:this.projName(w.project_id)})),
+        policies:policies.map(p=>({workshop:this.wsName(p.workshop_id),price:this.fmtInt(p.unit_price)+(p.price_unit==='hour'?' đ/giờ':' đ/người'),status:p.recruiting_status==='open'?'Đang tuyển':p.recruiting_status==='paused'?'Tạm dừng':'Đóng',sBg:p.recruiting_status==='open'?C.green.bg:C.gray.bg,sFg:p.recruiting_status==='open'?C.green.fg:C.gray.fg,salary:this.fmtShort(p.base_salary),dorm:p.has_dormitory})),
+        hasPolicies:policies.length>0,
+        receivables:recv.map(r=>{const m=this.agingMeta(r.aging_stage);return {period:r.period,amount:this.fmtShort(r.amount),remaining:this.fmtShort(r.remaining_amount),agingLabel:m[0],agBg:C[m[1]].bg,agFg:C[m[1]].fg};}),hasRecv:recv.length>0,
+        care:care.slice(0,5).map(t=>{const m=this.careStatusMeta(t.dstatus);return {type:t.activity_type==='meet'?'Gặp mặt':'Điện thoại',planned:this.fmtDateFull(t.planned_date),statusLabel:m[0],sBg:C[m[1]].bg,sFg:C[m[1]].fg};}),hasCare:care.length>0,
+        onBack:()=>this.setState({selectedCustomer:null})
+      }};
+    }
+    let list=this.scopeReadList(this.db.customers);
+    const q=(this.state.customerQ||'').toLowerCase(),ft=this.state.customerType||'all';
+    list=list.filter(c=>(ft==='all'||c.customer_type===ft)&&(q===''||(c.customer_name+(c.customer_name_zh||'')).toLowerCase().includes(q)));
+    const customerCards=list.map(c=>{const rem=this.db.receivables.filter(r=>r.customer_id===c.customer_id).map(r=>this.enrichReceivable(r)).filter(r=>r.collection_status!=='paid').reduce((s,r)=>s+r.remaining_amount,0);const ty=c.customer_type==='key';return {id:c.customer_id,name:c.customer_name,zh:c.customer_name_zh,hasZh:this.props.bilingual&&!!c.customer_name_zh,typeLabel:ty?'Trọng điểm':'Thường',typeBg:ty?C.blue.bg:C.gray.bg,typeFg:ty?C.blue.fg:C.gray.fg,branch:this.branchName(c.branch_id),manager:c.manager_staff_id?this.staffName(c.manager_staff_id):null,noManager:!c.manager_staff_id,remaining:rem>0?this.fmtShort(rem):'—',remColor:rem>0?'#0f172a':'#cbd5e1',onOpen:()=>this.openCustomer(c.customer_id)};});
+    return {isCustomerList:true,isCustomerDetail:false,customerCards,customerEmpty:customerCards.length===0,customerHasRows:customerCards.length>0,customerQ:this.state.customerQ||'',customerType:ft,
+      customerTypeOpts:[{value:'all',label:'Tất cả loại'},{value:'key',label:'Trọng điểm'},{value:'regular',label:'Khách thường'}],
+      onCustomerQ:(e)=>this.setState({customerQ:e.target.value}),onCustomerType:(e)=>this.setState({customerType:e.target.value})};
+  }
+  setCareTab(t){this.setState({careTab:t});}
+  startCare(id){const t=this.db.careTasks.find(x=>x.care_id===id);if(t&&t.status!=='done')t.status='in_progress';this.showToast('Đã bắt đầu chăm sóc',this.C.blue.sol);this.forceUpdate();}
+  openCareComplete(id){this.setState({careDraft:{care_id:id,result:'reached',content:''},modal:{kind:'care',width:'480px'}});}
+  updateCareDraft(f,v){this.setState(s=>({careDraft:Object.assign({},s.careDraft,{[f]:v})}));}
+  submitCare(){const d=this.state.careDraft,t=this.db.careTasks.find(x=>x.care_id===d.care_id);let gen=false;if(t){t.status='done';const add=t.frequency==='weekly'?7:t.frequency==='monthly'?30:0;if(add>0){gen=true;const base=this.parseD(t.planned_date);base.setDate(base.getDate()+add);const nd=base.getFullYear()+'-'+('0'+(base.getMonth()+1)).slice(-2)+'-'+('0'+base.getDate()).slice(-2);this.db.careTasks.push({care_id:'CSK-'+('00000'+(this.db.careTasks.length+1)).slice(-5),customer_id:t.customer_id,branch_id:t.branch_id,manager_staff_id:t.manager_staff_id,activity_type:t.activity_type,frequency:t.frequency,planned_date:nd,status:'pending',note:''});}}this.setState({modal:null,careDraft:null});this.showToast('Đã ghi nhận chăm sóc'+(gen?' · đã sinh lịch kế tiếp':''));}
+  careVals(){
+    const C=this.C,tab=this.state.careTab;
+    const tasks=this.scopeRows(this.db.careTasks.map(c=>this.enrichCare(c)));
+    const today=tasks.filter(t=>t.isToday&&t.dstatus!=='done'),overdue=tasks.filter(t=>t.dstatus==='overdue'),upcoming=tasks.filter(t=>t.isFuture&&t.dstatus!=='done'),done=tasks.filter(t=>t.dstatus==='done');
+    const map={today,overdue,upcoming,done},shown=(map[tab]||today).slice().sort((a,b)=>a.planned_date.localeCompare(b.planned_date));
+    const careTabs=[['today','Hôm nay',today.length],['overdue','Quá hạn',overdue.length],['upcoming','Sắp tới',upcoming.length],['done','Hoàn thành',done.length]].map(t=>({key:t[0],label:t[1],count:t[2],active:tab===t[0],bg:tab===t[0]?'var(--ac)':'#fff',fg:tab===t[0]?'#fff':'#475569',bd:tab===t[0]?'var(--ac)':'#e2e8f0',cbg:tab===t[0]?'rgba(255,255,255,.25)':'#f1f5f9',cfg:tab===t[0]?'#fff':'#64748b',onSelect:()=>this.setCareTab(t[0])}));
+    const careCards=shown.map(t=>{const m=this.careStatusMeta(t.dstatus);const ty=t.activity_type==='meet';return {id:t.care_id,customer:this.custName(t.customer_id),type:ty?'Gặp mặt':'Điện thoại',typeIcon:ty?'M16 7a4 4 0 11-8 0 4 4 0 018 0zM3 21v-2a5 5 0 015-5h8a5 5 0 015 5v2':'M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3-8.6A2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.3 1.8.6 2.7a2 2 0 01-.5 2.1L8 10a16 16 0 006 6l1.4-1.1a2 2 0 012.1-.5c.9.3 1.8.5 2.7.6a2 2 0 011.7 2z',freq:t.frequency==='weekly'?'1 lần/tuần':t.frequency==='monthly'?'1 lần/tháng':'Khi cần',planned:this.fmtDateFull(t.planned_date),manager:this.staffName(t.manager_staff_id),statusLabel:m[0],sBg:C[m[1]].bg,sFg:C[m[1]].fg,sDot:C[m[1]].sol,canAct:t.dstatus!=='done',onStart:()=>this.startCare(t.care_id),onComplete:()=>this.openCareComplete(t.care_id)};});
+    return {careTabs,careCards,careEmpty:careCards.length===0,careHasRows:careCards.length>0,careEmptyText:tab==='overdue'?'Không có lịch chăm sóc quá hạn':tab==='today'?'Hôm nay không có lịch chăm sóc':tab==='done'?'Chưa có lịch đã hoàn thành':'Không có lịch sắp tới'};
+  }
+  openCollection(id){this.setState({collDraft:{receivable_id:id,amount:'',note:'',override:''},modal:{kind:'collection',width:'480px'}});}
+  updateColl(f,v){this.setState(s=>({collDraft:Object.assign({},s.collDraft,{[f]:v})}));}
+  submitCollection(){const d=this.state.collDraft,r=this.db.receivables.find(x=>x.receivable_id===d.receivable_id);if(!r){this.closeModal();return;}const amt=+d.amount||0;const can=['ADMIN','BM'].includes(this.state.role);if(amt<=0&&!(can&&d.override)){this.showToast('Nhập số tiền thu hợp lệ',this.C.red.sol);return;}if(amt>0)r.collected_amount=Math.min(r.amount,(+r.collected_amount||0)+amt);if(can&&d.override)r.stageOverride=d.override;this.setState({modal:null,collDraft:null});this.showToast(amt>0?'Đã ghi nhận thu '+this.fmtVnd(amt):'Đã cập nhật giai đoạn thu hồi');}
+  receivableVals(){
+    const C=this.C,dense=this.props.density==='compact';
+    let rows=this.scopeRows(this.db.receivables.map(r=>this.enrichReceivable(r)));
+    const fstage=this.state.recStage||'all',q=(this.state.recQ||'').toLowerCase();
+    let filtered=rows.filter(r=>(fstage==='all'||r.aging_stage===fstage)&&(q===''||this.custName(r.customer_id).toLowerCase().includes(q))).sort((a,b)=>b.overdue_days-a.overdue_days);
+    const unpaid=rows.filter(r=>r.collection_status!=='paid'),totalRem=unpaid.reduce((s,r)=>s+r.remaining_amount,0);
+    const overdue=unpaid.filter(r=>r.overdue_days>0),overdueRem=overdue.reduce((s,r)=>s+r.remaining_amount,0);
+    const collected=rows.reduce((s,r)=>s+(+r.collected_amount||0),0),gross=rows.reduce((s,r)=>s+r.amount,0);
+    const recCards=[{label:'Còn phải thu',value:this.fmtShort(totalRem),sub:unpaid.length+' hồ sơ',color:C.gray.sol},{label:'Quá hạn',value:this.fmtShort(overdueRem),sub:overdue.length+' hồ sơ',color:overdue.length?C.red.sol:C.green.sol},{label:'Đã thu',value:this.fmtShort(collected),sub:'lũy kế',color:C.green.sol},{label:'Tỷ lệ thu',value:this.pct(gross?collected/gross:0),sub:'trên tổng phát sinh',color:C.blue.sol}];
+    const recRows=filtered.map(r=>{const m=this.agingMeta(r.aging_stage),cm=this.collMeta(r.collection_status);return {id:r.receivable_id,customer:this.custName(r.customer_id),period:r.period,amount:this.fmtShort(r.amount),collected:this.fmtShort(r.collected_amount),remaining:this.fmtShort(r.remaining_amount),overdue:(r.collection_status!=='paid'&&r.overdue_days>0)?r.overdue_days+'n':'—',overdueColor:(r.collection_status!=='paid'&&r.overdue_days>0)?'#dc2626':'#cbd5e1',agingLabel:m[0],agBg:C[m[1]].bg,agFg:C[m[1]].fg,overridden:r.overridden,statusLabel:cm[0],stDot:C[cm[1]].sol,paid:r.collection_status==='paid',notPaid:r.collection_status!=='paid',py:dense?'7px':'10px',onCollect:()=>this.openCollection(r.receivable_id)};});
+    return {recCards,recRows,recEmpty:recRows.length===0,recHasRows:recRows.length>0,recQ:this.state.recQ||'',recStage:fstage,recCanCollect:['ADMIN','BM','OM'].includes(this.state.role),
+      recStageOpts:[{value:'all',label:'Tất cả giai đoạn'},{value:'not_due',label:'Trong hạn'},{value:'remind_1',label:'Nhắc 1'},{value:'remind_2',label:'Nhắc 2'},{value:'official_letter',label:'Công văn'},{value:'negotiation',label:'Đàm phán'},{value:'legal',label:'Pháp lý'},{value:'paid',label:'Đã thu'}],
+      onRecQ:(e)=>this.setState({recQ:e.target.value}),onRecStage:(e)=>this.setState({recStage:e.target.value})};
+  }
+  lbl(s){return {active:'Đang chạy',paused:'Tạm dừng',ended:'Kết thúc',official:'Chính thức',probation:'Thử việc',inactive:'Ngừng',open:'Đang tuyển',closed:'Đóng'}[s]||s;}
+  stTone(s){return ['active','official','open'].includes(s)?'green':['paused','probation'].includes(s)?'amber':'gray';}
+  roleBiz(s){return {BM:'Giám đốc CN',OM:'Quản lý VH',SPV:'Chuyên viên'}[s]||s;}
+  mkCells(arr){return arr.map((v,i)=>({v:String(v),weight:i===0?'600':'400',color:i===0?'#0f172a':'#475569'}));}
+  masterVals(){
+    const C=this.C,tab=this.state.masterTab;
+    const tabs=[['projects','Dự án'],['workshops','Xưởng'],['staff','Nhân sự'],['policies','Chính sách']].map(t=>({key:t[0],label:t[1],active:tab===t[0],bg:tab===t[0]?'var(--ac)':'#fff',fg:tab===t[0]?'#fff':'#475569',bd:tab===t[0]?'var(--ac)':'#e2e8f0',onSelect:()=>this.setState({masterTab:t[0]})}));
+    let cols=[],rows=[];
+    if(tab==='projects'){cols=['Dự án','Khách hàng','Chi nhánh','Quản lý','Trạng thái'];rows=this.scopeReadList(this.db.projects).map(p=>({cells:this.mkCells([p.project_name,this.custName(p.customer_id),this.branchName(p.branch_id),this.staffName(p.manager_staff_id)]),badge:this.lbl(p.status),bBg:C[this.stTone(p.status)].bg,bFg:C[this.stTone(p.status)].fg}));}
+    else if(tab==='workshops'){cols=['Xưởng','Dự án','Khách hàng','Trạng thái'];rows=this.scopeReadList(this.db.workshops.map(w=>Object.assign({},w,{branch_id:this.projById(w.project_id).branch_id}))).map(w=>({cells:this.mkCells([w.workshop_name,this.projName(w.project_id),this.custName(w.customer_id)]),badge:this.lbl(w.status),bBg:C[this.stTone(w.status)].bg,bFg:C[this.stTone(w.status)].fg}));}
+    else if(tab==='staff'){cols=['Nhân sự','Vai trò','Chi nhánh','Quản lý','Trạng thái'];rows=this.scopeReadList(this.db.staff).map(s=>({cells:this.mkCells([s.full_name,this.roleBiz(s.role_business),this.branchName(s.branch_id),s.manager_staff_id?this.staffName(s.manager_staff_id):'—']),badge:this.lbl(s.status),bBg:C[this.stTone(s.status)].bg,bFg:C[this.stTone(s.status)].fg}));}
+    else{cols=['Khách hàng','Xưởng','Đơn giá','Lương CB','Tuyển'];rows=this.scopeReadList(this.db.policies.map(p=>Object.assign({},p,{branch_id:this.custById(p.customer_id).branch_id}))).map(p=>({cells:this.mkCells([this.custName(p.customer_id),this.wsName(p.workshop_id),this.fmtInt(p.unit_price)+(p.price_unit==='hour'?' đ/giờ':' đ/người'),this.fmtShort(p.base_salary)+(p.has_dormitory?' · KTX':'')]),badge:this.lbl(p.recruiting_status),bBg:C[this.stTone(p.recruiting_status)].bg,bFg:C[this.stTone(p.recruiting_status)].fg}));}
+    return {masterTabs:tabs,masterCols:cols,masterRows:rows,masterEmpty:rows.length===0};
+  }
+  settingsVals(){
+    const C=this.C,tab=this.state.settingsTab;
+    const tabs=[['users','Người dùng'],['categories','Danh mục']].map(t=>({key:t[0],label:t[1],active:tab===t[0],bg:tab===t[0]?'var(--ac)':'#fff',fg:tab===t[0]?'#fff':'#475569',bd:tab===t[0]?'var(--ac)':'#e2e8f0',onSelect:()=>this.setState({settingsTab:t[0]})}));
+    let cols=[],rows=[];
+    if(tab==='users'){cols=['Email','Tên hiển thị','Vai trò','Nhân sự','Chi nhánh','Trạng thái'];rows=this.db.users.map(u=>({cells:this.mkCells([u.user_email,u.display_name,u.role,u.staff_id?this.staffName(u.staff_id):'—',u.branch_id?this.branchName(u.branch_id):'—']),mono0:true,badge:u.active?'Hoạt động':'Đã khóa',bBg:u.active?C.green.bg:C.red.bg,bFg:u.active?C.green.fg:C.red.fg}));}
+    else{cols=['Nhóm','Mã','Nhãn (VI)','Nhãn (中文)','Trạng thái'];rows=this.db.categories.map(c=>({cells:this.mkCells([c.category_group,c.enum_code,c.label_vi,c.label_zh]),mono0:true,badge:c.active?'Bật':'Tắt',bBg:c.active?C.green.bg:C.gray.bg,bFg:c.active?C.green.fg:C.gray.fg}));}
+    return {settingsTabs:tabs,settingsCols:cols,settingsRows:rows};
+  }
+  modalVals(){ return Object.assign({}, this.navModalVals(), this.reportModalVals(), this.careModalVals(), this.collectionModalVals(), this.detailModalVals()); }
+  navModalVals(){
+    const m=this.state.modal,role=this.state.role;
+    const modalNavItems=this.NAV.filter(n=>n.roles.includes(role)).map(n=>({key:n.key,label:n.label,icon:n.icon,bg:this.state.nav===n.key?'color-mix(in srgb,var(--ac) 8%,#fff)':'#fff',fg:this.state.nav===n.key?'var(--ac)':'#475569',onSelect:()=>this.setNav(n.key)}));
+    return {modalIsNav:!!(m&&m.kind==='nav'),modalNavItems};
+  }
+  reportModalVals(){
+    const m=this.state.modal,d=this.state.reportDraft;
+    if(!(m&&m.kind==='report'&&d)) return {modalIsReport:false};
+    const v=this.validateDraft(d);
+    const wsOpts=this.db.workshops.filter(w=>w.project_id===d.project_id).map(w=>({value:w.workshop_id,label:w.workshop_name}));
+    return {modalIsReport:true,reportForm:{
+      isEdit:!!d.report_id,title:d.report_id?'Sửa báo cáo ngày':'Nhập báo cáo ngày',
+      date:d.date,project_id:d.project_id,workshop_id:d.workshop_id,method:d.method,specialist_staff_id:d.specialist_staff_id,
+      registered:d.registered,interviewed:d.interviewed,passed_interview:d.passed_interview,started_work:d.started_work,note:d.note||'',
+      weekText:this.weekLabelFull(this.isoWeek(d.date)),
+      projOpts:this.dailyProjectOptions().filter(o=>o.value!=='all'),wsOpts,wsDisabled:!d.project_id||wsOpts.length===0,
+      spvOpts:this.specialistOptions(d.project_id),spvLocked:this.state.role==='SPV',
+      warnings:v.warnings,hasWarn:v.warnings.length>0,
+      onDate:(e)=>this.updateDraft('date',e.target.value),
+      onProject:(e)=>this.setState(s=>({reportDraft:Object.assign({},s.reportDraft,{project_id:e.target.value,workshop_id:''})})),
+      onWs:(e)=>this.updateDraft('workshop_id',e.target.value),onMethod:(e)=>this.updateDraft('method',e.target.value),onSpv:(e)=>this.updateDraft('specialist_staff_id',e.target.value),
+      onReg:(e)=>this.updateDraft('registered',e.target.value),onIntv:(e)=>this.updateDraft('interviewed',e.target.value),onPass:(e)=>this.updateDraft('passed_interview',e.target.value),onStart:(e)=>this.updateDraft('started_work',e.target.value),onNote:(e)=>this.updateDraft('note',e.target.value),
+      onSave:()=>this.saveReport()
+    }};
+  }
+  careModalVals(){
+    const m=this.state.modal,d=this.state.careDraft;
+    if(!(m&&m.kind==='care'&&d))return {modalIsCare:false};
+    const t=this.db.careTasks.find(x=>x.care_id===d.care_id)||{};
+    return {modalIsCare:true,careForm:{customer:this.custName(t.customer_id),type:t.activity_type==='meet'?'Gặp mặt':'Điện thoại',result:d.result,content:d.content,
+      onResult:(e)=>this.updateCareDraft('result',e.target.value),onContent:(e)=>this.updateCareDraft('content',e.target.value),onSubmit:()=>this.submitCare()}};
+  }
+  collectionModalVals(){
+    const m=this.state.modal,d=this.state.collDraft;
+    if(!(m&&m.kind==='collection'&&d))return {modalIsColl:false};
+    const r=this.enrichReceivable(this.db.receivables.find(x=>x.receivable_id===d.receivable_id)||{amount:0,collected_amount:0,due_date:this.today});
+    return {modalIsColl:true,collForm:{customer:this.custName(r.customer_id),period:r.period,amount:this.fmtVnd(r.amount),collected:this.fmtVnd(r.collected_amount),remaining:this.fmtVnd(r.remaining_amount),inputAmount:d.amount,note:d.note,override:d.override,canOverride:['ADMIN','BM'].includes(this.state.role),
+      onAmount:(e)=>this.updateColl('amount',e.target.value),onNote:(e)=>this.updateColl('note',e.target.value),onOverride:(e)=>this.updateColl('override',e.target.value),onFull:()=>this.updateColl('amount',String(r.remaining_amount)),onSubmit:()=>this.submitCollection()}};
+  }
+  detailModalVals(){return {};}
+}
+</script>
+</body>
+</html>

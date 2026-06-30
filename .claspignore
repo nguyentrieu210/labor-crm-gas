@@ -1,0 +1,6 @@
+# Chỉ đẩy code (.gs) + giao diện (.html) + manifest lên Apps Script
+**/**
+
+!appsscript.json
+!*.gs
+!*.html

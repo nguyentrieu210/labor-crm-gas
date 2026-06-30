@@ -1,0 +1,9 @@
+# Node / OS
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+
+# Clasp OAuth token (KHÔNG BAO GIỜ commit) — token thật của tài khoản Google
+.clasprc.json
+*.clasprc.json
